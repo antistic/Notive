@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div class="app">
     <Loader :isReady="$store.ready">
       <Notebooks :root="$store.state.fileTree" />
     </Loader>
@@ -16,14 +16,13 @@ export default {
 </script>
 
 <style lang="scss">
-#app {
+.app {
   box-sizing: border-box;
   width: 100vw;
   height: 100vh;
   padding: 3em 2em;
   overflow-y: auto;
-  font-family:
-    "Segoe UI",
+  font-family: "Segoe UI",
     Calibri,
     "Noto Sans",
     "Helvetica Neue",

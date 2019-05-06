@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
+    "lint": "npm run lint:css & npm run lint:js",
+    "lint:css": "stylelint --fix ./src/**/*.vue ./src/**/*.css",
+    "lint:js": "vue-cli-service lint",
     "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
@@ -34,6 +36,10 @@
     "eslint-plugin-vue": "^5.0.0",
     "sass": "^1.18.0",
     "sass-loader": "^7.1.0",
+    "stylelint": "^10.0.1",
+    "stylelint-config-airbnb": "0.0.0",
+    "stylelint-config-recess-order": "^2.0.2",
+    "stylelint-scss": "^3.6.1",
     "vue-template-compiler": "^2.5.21"
   }
 }

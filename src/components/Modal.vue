@@ -1,7 +1,7 @@
 <template>
   <div class="modal" @click.self="hide">
-    <div :class="`contents ${modalType}`">
-      <IconButton @click="hide" position="corner-of-box" icon="md-close-circle" />
+    <div :class="`contents contents--${modalType}`">
+      <IconButton @click="hide" position="corner-of-box" icon="md-close-circle"/>
       <slot/>
     </div>
   </div>
@@ -45,24 +45,24 @@ export default {
     overflow-y: auto;
     cursor: default;
     background-color: white;
+  }
 
-    &.image {
-      width: auto;
-      min-width: 200px;
-      min-height: 200px;
-      height: auto;
-      padding: 0;
-      overflow: hidden;
-      background-color: transparent;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+  .contents--image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-width: 200px;
+    height: auto;
+    min-height: 200px;
+    padding: 0;
+    overflow: hidden;
+    background-color: transparent;
 
-      img {
-        max-width: calc(100vw - 6em);
-        max-height: calc(100vh - 6em);
-        object-fit: scale-down;
-      }
+    img {
+      max-width: calc(100vw - 6em);
+      max-height: calc(100vh - 6em);
+      object-fit: scale-down;
     }
   }
 }
