@@ -1,8 +1,5 @@
-
-
-import { app, protocol, BrowserWindow } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import {
-  createProtocol,
   installVueDevtools,
 } from 'vue-cli-plugin-electron-builder/lib';
 
@@ -12,15 +9,14 @@ const isDevelopment = process.env.NODE_ENV !== 'production';
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
 
-// Scheme must be registered before the app is ready
-protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true } }]);
-
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
+      // allow access to 'files://' protocol with webpack development server
+      webSecurity: !isDevelopment,
       nodeIntegration: true,
     },
   });
@@ -30,9 +26,8 @@ function createWindow() {
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
     if (!process.env.IS_TEST) win.webContents.openDevTools();
   } else {
-    createProtocol('app');
     // Load the index.html when not in development
-    win.loadURL('app://./index.html');
+    win.loadURL('file://./index.html');
   }
 
   win.on('closed', () => {
