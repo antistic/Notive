@@ -1,26 +1,32 @@
 import fs from 'fs-extra';
 import path from 'path';
 import { getThumbnailPath, makeThumbnail } from '@/utils/thumbnailer';
-import store from '@/api/store';
+import database from '@/api/database';
 
 export default class File {
   constructor(parent, filePath, fileId) {
     this.type = 'file';
-    this.path = filePath;
-    this.id = fileId;
-    this.parent = parent;
-    this.thumbnailPath = getThumbnailPath(this.path);
 
+    this.parent = parent;
+
+    this.path = filePath;
     this.name = path.basename(filePath);
+
+    this.id = fileId;
+
+    this.getAttributes();
+
+    this.thumbnailPath = getThumbnailPath(this.path);
     this.makeThumbnail();
   }
 
-  get metadata() {
-    if (this._data === undefined) {
-      this._data = store.db.getAttributes(this.id);
-    }
+  async getAttributes() {
+    this.metadata = await database.getFileAttributes(this.id);
+  }
 
-    return this._data;
+  async setAttribute(name, data) {
+    await database.setFileAttributeData(this.id, name, data);
+    this.metadata = await database.getFileAttributes(this.id);
   }
 
   makeThumbnail(force = false) {

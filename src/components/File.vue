@@ -24,6 +24,33 @@
         :alt="file.path"
       >
     </Modal>
+
+    <div class="attributes">
+      <p
+        v-for="{attr_name, attr_data} in file.metadata"
+        :key="attr_name"
+      >
+        {{ attr_name }}: {{ attr_data }}
+      </p>
+    </div>
+
+    <div>
+      <input
+        id="attrName"
+        v-model="attrName"
+        type="text"
+        name="attrName"
+      >
+      <input
+        id="attrData"
+        v-model="attrData"
+        type="text"
+        name="attrData"
+      >
+      <button @click="setFileAttribute">
+        add
+      </button>
+    </div>
   </div>
 </template>
 
@@ -45,9 +72,14 @@ export default {
   data() {
     return {
       showImageModal: false,
+      attrName: '',
+      attrData: '',
     };
   },
   methods: {
+    setFileAttribute() {
+      this.file.setAttribute(this.attrName, this.attrData);
+    },
     openFile() {
       if (isBrowserSupportedImage(this.file.path)) {
         this.showImageModal = true;
