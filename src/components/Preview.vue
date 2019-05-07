@@ -3,7 +3,7 @@
     class="preview"
     :class="[
       $listeners.click ? 'clickable' : '',
-      previewType
+      `preview--${itemType}`
     ]"
     @click="$emit('click')"
   >
@@ -40,7 +40,7 @@ export default {
       type: String,
       default: '',
     },
-    previewType: {
+    itemType: {
       type: String,
       default: '',
     },
@@ -56,19 +56,6 @@ export default {
 <style lang="scss">
 .preview {
   border-radius: 2px;
-
-  &.directory {
-    width: 150px;
-    height: 150px;
-    padding: 15px;
-    background-color: rgb(224, 224, 224);
-    border: 1px solid rgb(148, 148, 148);
-  }
-
-  &.file {
-    width: 182px;
-    height: 182px;
-  }
 
   &.clickable {
     cursor: pointer;
@@ -95,6 +82,19 @@ export default {
   .tags {
     font-style: italic;
   }
+}
+
+.preview--directory {
+  width: 150px;
+  height: 150px;
+  padding: 15px;
+  background-color: rgb(224, 224, 224);
+  border: 1px solid rgb(148, 148, 148);
+}
+
+.preview--file {
+  width: 182px;
+  height: 182px;
 }
 
 .items-preview {

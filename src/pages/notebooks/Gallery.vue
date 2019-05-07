@@ -13,7 +13,7 @@
       :key="item.path"
       :images="getImagePaths(item)"
       :name="item.type === 'directory' ? item.name : ''"
-      :preview-type="item.type"
+      :item-type="item.type"
       @click="$emit('showItem', item)"
     />
   </div>

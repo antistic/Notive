@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="file">
     <IconButton
       v-if="file.parent"
       options="top-left label-besides"
@@ -11,7 +11,7 @@
 
     <Preview
       :images="[file.thumbnailPath]"
-      :preview-type="file.type"
+      :item-type="file.type"
       @click="openFile"
     />
 
@@ -26,37 +26,46 @@
       >
     </Modal>
 
-    <div class="attributes">
-      <p
+    <h3>Metadata</h3>
+    <table class="metadata">
+      <tr
         v-for="{attr_name, attr_data} in file.metadata"
-        :key="attr_name"
+        :key="`${attr_name}-${attrData}`"
       >
-        {{ attr_name }}: {{ attr_data }}
-      </p>
-    </div>
+        <td class="metadata-name">
+          {{ attr_name }}
+        </td>
+        <td class="metadata-data">
+          {{ attr_data }}
+        </td>
+      </tr>
 
-    <div>
-      <input
-        id="attrName"
-        v-model="attrName"
-        type="text"
-        name="attrName"
-      >
-      <input
-        id="attrData"
-        v-model="attrData"
-        type="text"
-        name="attrData"
-      >
-      <button @click="setFileAttribute">
-        add
-      </button>
-    </div>
+      <tr>
+        <td>
+          <LabelledTextInput
+            v-model="attrName"
+            label="Name"
+          />
+        </td>
+        <td>
+          <LabelledTextInput
+            v-model="attrData"
+            label="Data"
+          />
+        </td>
+        <td>
+          <button @click="setFileAttribute">
+            add
+          </button>
+        </td>
+      </tr>
+    </table>
   </div>
 </template>
 
 <script>
 import IconButton from '@/components/IconButton.vue';
+import LabelledTextInput from '@/components/LabelledTextInput.vue';
 import BackIcon from '@icons/md-arrow-round-back.svg';
 import Modal from '@/components/Modal.vue';
 import Preview from '@/components/Preview.vue';
@@ -66,6 +75,7 @@ import { remote, shell } from 'electron';
 export default {
   components: {
     IconButton,
+    LabelledTextInput,
     BackIcon,
     Modal,
     Preview,
@@ -117,4 +127,31 @@ export default {
 </script>
 
 <style lang="scss">
+.file {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1em;
+}
+
+.metadata-name {
+  font-weight: bold;
+  text-align: right;
+
+  &:after {
+    content: ":";
+  }
+}
+
+.metadata td {
+  padding: 0 0.5em;
+}
+
+.metadata tr:last-child {
+  height: 4em;
+
+  td {
+    vertical-align: bottom;
+  }
+}
 </style>
