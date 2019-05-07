@@ -77,7 +77,7 @@ export default {
 
     await new Promise((resolve, _) => {
       const watcher = chokidar.watch(appPaths.notebooks, {
-        ignored: [/\.kra~$/],
+        ignored: [/\.~\w*$|\.(TMP|tmp|kra~)$/],
         persistent: true,
       });
 

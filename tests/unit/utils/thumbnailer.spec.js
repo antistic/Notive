@@ -33,7 +33,7 @@ describe('thumbnailer', () => {
       const spy = jest.spyOn(makeKritaThumbnail, 'default');
       spy.mockResolvedValueOnce(true);
 
-      await expect(makeThumbnail('testSource.kra', 'testDestination.kra'))
+      await expect(makeThumbnail('testSource.kra', 'testDestination.kra', 0))
         .resolves.toBeUndefined();
 
       expect(spy).toHaveBeenCalledTimes(1);
@@ -47,7 +47,7 @@ describe('thumbnailer', () => {
       const spy = jest.spyOn(makeSharpThumbnail, 'default');
       spy.mockResolvedValueOnce(true);
 
-      await expect(makeThumbnail(`testSource${ext}`, `testSource.kra${ext}`))
+      await expect(makeThumbnail(`testSource${ext}`, `testSource.kra${ext}`, 0))
         .resolves.toBeUndefined();
 
       expect(spy).toHaveBeenCalledTimes(1);
@@ -58,7 +58,7 @@ describe('thumbnailer', () => {
     it.each(
       ['.txt', '.pdf', '.bleh'],
     )('fails for unsupported (%s) files', ext => expect(
-      makeThumbnail(`testSource${ext}`, `testSource.kra${ext}`),
+      makeThumbnail(`testSource${ext}`, `testSource.kra${ext}`, 0),
     )
       .rejects.toThrow());
   });

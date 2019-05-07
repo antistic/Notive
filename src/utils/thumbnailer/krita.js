@@ -1,15 +1,8 @@
 import fs from 'fs-extra';
 import yauzl from 'yauzl';
-import os from 'os';
-import path from 'path';
 
 export default (source, destination) => new Promise((resolve, reject) => {
-  const tmpdir = os.tmpdir();
-  const tmpPath = path.join(tmpdir, path.basename(source));
-
-  fs.copyFileSync(source, tmpPath);
-
-  yauzl.open(tmpPath, { lazyEntries: true }, (err0, zipfile) => {
+  yauzl.open(source, { lazyEntries: true }, (err0, zipfile) => {
     if (err0) reject(err0);
 
     zipfile.on('entry', (entry) => {

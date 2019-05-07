@@ -26,11 +26,12 @@ export default class File {
   makeThumbnail(force = false) {
     fs.pathExists(this.thumbnailPath).then((exists) => {
       if (force || !exists) {
-        fs.ensureDir(path.dirname(this.thumbnailPath))
-          .then(() => makeThumbnail(this.path, this.thumbnailPath))
+        const outputPath = getThumbnailPath(this.path);
+        fs.ensureDir(path.dirname(outputPath))
+          .then(() => makeThumbnail(this.path, outputPath))
           .then(() => {
             // add current time to force url to change
-            this.thumbnailPath = `${this.thumbnailPath}?m=${new Date().getTime()}`;
+            this.thumbnailPath = `${outputPath}?m=${new Date().getTime()}`;
           });
       }
     });
