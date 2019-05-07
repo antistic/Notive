@@ -14,6 +14,7 @@ export default class File {
 
     this.id = fileId;
 
+    this.metadata = [];
     this.getAttributes();
 
     this.thumbnailPath = getThumbnailPath(this.path);
@@ -26,7 +27,7 @@ export default class File {
 
   async setAttribute(name, data) {
     await database.setFileAttributeData(this.id, name, data);
-    this.metadata = await database.getFileAttributes(this.id);
+    await this.getAttributes();
   }
 
   makeThumbnail(force = false) {
