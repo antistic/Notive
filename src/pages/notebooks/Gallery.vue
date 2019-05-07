@@ -11,14 +11,10 @@
     <Preview
       v-for="item in sortedContents"
       :key="item.path"
-      v-on="
-        item.type === 'directory'
-          ? { click: () => $emit('showDirectory', item) }
-          : { click: () => $emit('showFile', item) }
-      "
       :images="getImagePaths(item)"
       :name="item.type === 'directory' ? item.name : ''"
-      :previewType="item.type"
+      :preview-type="item.type"
+      @click="$emit('showItem', item)"
     />
   </div>
 </template>

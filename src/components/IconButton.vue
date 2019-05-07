@@ -1,6 +1,13 @@
 <template>
-  <button :class="`iconButton iconButton--${position}`" @click="$emit('click')" :title="title">
-    <i :class="`icon ion-${icon}`"/>
+  <button
+    :class="[
+      'iconButton',
+      position ? `iconButton--${position}` : ''
+    ]"
+    :title="title"
+    @click="$emit('click')"
+  >
+    <i :class="`icon ion-${icon}`" />
   </button>
 </template>
 

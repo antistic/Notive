@@ -1,8 +1,20 @@
 <template>
-  <div class="modal" @click.self="hide">
-    <div :class="`contents contents--${modalType}`">
-      <IconButton @click="hide" position="corner-of-box" icon="md-close-circle"/>
-      <slot/>
+  <div
+    class="modal"
+    @click.self="hide"
+  >
+    <div
+      :class="[
+        'contents',
+        modalType ? `contents--${modalType}` : ''
+      ]"
+    >
+      <IconButton
+        position="corner-of-box"
+        icon="md-close-circle"
+        @click="hide"
+      />
+      <slot />
     </div>
   </div>
 </template>

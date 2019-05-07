@@ -47,8 +47,7 @@
     <Gallery
       v-if="directory.type === 'directory'"
       :contents="directory.contents"
-      @showDirectory="showDirectory"
-      @showFile="showFile"
+      @showItem="showItem"
     />
   </div>
 </template>
@@ -82,6 +81,17 @@ export default {
     };
   },
   methods: {
+    showItem(item) {
+      switch (item.type) {
+        case 'directory':
+          this.showDirectory(item);
+          break;
+        case 'file':
+          this.showFile(item);
+          break;
+        default:
+      }
+    },
     showDirectory(directory) {
       this.$emit('showDirectory', directory);
     },

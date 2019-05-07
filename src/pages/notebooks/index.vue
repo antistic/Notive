@@ -38,6 +38,17 @@ export default {
     };
   },
   methods: {
+    showItem(item) {
+      switch (item.type) {
+        case 'directory':
+          this.showDirectory(item);
+          break;
+        case 'file':
+          this.showFile(item);
+          break;
+        default:
+      }
+    },
     showDirectory(directory) {
       this.currentDirectory = directory;
       this.active = 'directory';

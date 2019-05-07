@@ -1,17 +1,19 @@
 <template>
   <div
     class="preview"
-    :class="
-      `${$listeners.click ? 'clickable' : ''}
-       ${previewType}`
-    "
+    :class="[
+      $listeners.click ? 'clickable' : '',
+      previewType
+    ]"
     @click="$emit('click')"
   >
-    <div :class="[
-      'items-preview',
-      `items-preview--${Math.min(images.length, 4)}`,
-      `${name ? 'has-name' : ''}`,
-      ]">
+    <div
+      :class="[
+        'items-preview',
+        `items-preview--${Math.min(images.length, 4)}`,
+        `${name ? 'has-name' : ''}`,
+      ]"
+    >
       <img
         v-for="imagePath in images.slice(0, 4)"
         :key="imagePath"
