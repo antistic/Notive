@@ -1,34 +1,20 @@
-# notive
+# Notive
 
-## Project setup
+An app to collect and create images.
+
+## Building
 ```
 npm install
 ```
-
-### Compiles and hot-reloads for development
+[sqlite3](https://github.com/mapbox/node-sqlite3) needs to be (re-)built for electron:
 ```
-npm run serve
+npm rebuild sqlite3--runtime=electron --target=1.7.6 --dist-url=https://atom.io/download/electron
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Run your unit tests
+## Testing
 ```
 npm run test:unit
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+This project tests in a node environment. [sqlite3](https://github.com/mapbox/node-sqlite3) needs to be (re-)built for this environment as well.
+```
+npm rebuild sqlite3
+```
