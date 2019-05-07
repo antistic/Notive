@@ -16,6 +16,7 @@ module.exports = {
   ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '^@icons/(.*)$': '<rootDir>/src/assets/ionicons/$1',
   },
   snapshotSerializers: [
     'jest-serializer-vue',

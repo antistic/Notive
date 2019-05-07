@@ -26,6 +26,7 @@ module.exports = {
     }],
     'import/extensions': ['error', {
       js: 'never',
+      svg: 'always',
       vue: 'ignorePackages',
     }],
     'import/order': ['error', {

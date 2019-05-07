@@ -2,11 +2,12 @@
   <div>
     <IconButton
       v-if="file.parent"
-      title="back"
-      position="corner"
-      icon="md-arrow-round-back"
+      options="top-left label-besides"
+      text="Back"
       @click="$emit('showDirectory', file.parent)"
-    />
+    >
+      <BackIcon class="hover--move-left" />
+    </IconButton>
 
     <Preview
       :images="[file.thumbnailPath]"
@@ -56,13 +57,19 @@
 
 <script>
 import IconButton from '@/components/IconButton.vue';
+import BackIcon from '@icons/md-arrow-round-back.svg';
 import Modal from '@/components/Modal.vue';
 import Preview from '@/components/Preview.vue';
 import { isBrowserSupportedImage } from '@/utils/extensions';
 import { remote, shell } from 'electron';
 
 export default {
-  components: { IconButton, Modal, Preview },
+  components: {
+    IconButton,
+    BackIcon,
+    Modal,
+    Preview,
+  },
   props: {
     file: {
       type: Object,

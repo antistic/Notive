@@ -9,8 +9,15 @@ module.exports = {
     },
   },
   chainWebpack: (config) => {
+    const svgRule = config.module.rule('svg');
+
+    svgRule.uses.clear();
+    svgRule.use('vue-svg-loader')
+      .loader('vue-svg-loader');
+
     config.resolve.alias
-      .set('@', path.resolve(__dirname, 'src'));
+      .set('@', path.resolve(__dirname, 'src'))
+      .set('@icons', path.resolve(__dirname, 'src/assets/ionicons'));
   },
   pluginOptions: {
     electronBuilder: {

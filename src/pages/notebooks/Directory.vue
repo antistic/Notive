@@ -4,28 +4,32 @@
 
     <IconButton
       v-if="directory.parent"
-      title="back"
-      position="corner"
-      icon="md-arrow-round-back"
+      options="top-left label-besides"
+      text="Back"
       @click="() => showDirectory(directory.parent)"
-    />
+    >
+      <BackIcon class="hover--move-left" />
+    </IconButton>
 
     <div class="menu">
       <IconButton
-        title="new directory"
-        icon="md-folder"
+        text="New Folder"
         @click="showNewDirectoryModal = true"
-      />
+      >
+        <FolderIcon class="hover--twitch" />
+      </IconButton>
       <IconButton
-        title="new image from template"
-        icon="md-bookmarks"
+        text="Use Template"
         @click="showNewImageModal = true"
-      />
+      >
+        <TemplateIcon class="hover--twitch ios" />
+      </IconButton>
       <IconButton
-        title="add image(s)"
-        icon="md-add-circle"
+        text="Add Images"
         @click="showAddImagesModal = true"
-      />
+      >
+        <ImagesIcon class="hover--twitch" />
+      </IconButton>
     </div>
 
     <NewDirectoryModal
@@ -54,10 +58,14 @@
 
 <script>
 import IconButton from '@/components/IconButton.vue';
+import BackIcon from '@icons/md-arrow-round-back.svg';
+import FolderIcon from '@icons/md-folder-open.svg';
+import TemplateIcon from '@icons/ios-flask.svg';
+import ImagesIcon from '@icons/md-images.svg';
 import Gallery from './Gallery.vue';
+import NewImageFromTemplateModal from './modals/NewImageFromTemplate.vue';
 import AddImagesModal from './modals/AddImages.vue';
 import NewDirectoryModal from './modals/NewDirectory.vue';
-import NewImageFromTemplateModal from './modals/NewImageFromTemplate.vue';
 
 export default {
   components: {
@@ -66,6 +74,10 @@ export default {
     NewImageFromTemplateModal,
     AddImagesModal,
     IconButton,
+    BackIcon,
+    FolderIcon,
+    TemplateIcon,
+    ImagesIcon,
   },
   props: {
     directory: {

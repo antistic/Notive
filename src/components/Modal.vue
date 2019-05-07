@@ -10,10 +10,11 @@
       ]"
     >
       <IconButton
-        position="corner-of-box"
-        icon="md-close-circle"
+        options="top-right label-none"
         @click="hide"
-      />
+      >
+        <CloseIcon class="white" />
+      </IconButton>
       <slot />
     </div>
   </div>
@@ -21,9 +22,10 @@
 
 <script>
 import IconButton from '@/components/IconButton.vue';
+import CloseIcon from '@icons/md-close-circle-outline.svg';
 
 export default {
-  components: { IconButton },
+  components: { IconButton, CloseIcon },
   props: {
     modalType: {
       type: String,
