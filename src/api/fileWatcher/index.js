@@ -5,6 +5,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import os from 'os';
 import { appPaths } from '@/api/appPaths';
+import database from '@/api/database';
 import store from '@/api/store';
 
 /* ----- helper methods */
@@ -35,8 +36,14 @@ function deleteFromFileTree(itemPath) {
 
 /* ----- watcher methods */
 
-const onAdd = (filePath) => {
-  addToFileTree('file', filePath);
+const onAdd = (filePath, stats) => {
+  database.ensureFileEntry(filePath, stats)
+    .then(({ id, modified }) => {
+      const file = addToFileTree('file', filePath, id);
+      if (modified) {
+        file.makeThumbnail(true);
+      }
+    });
 };
 
 const onAddDir = (dirPath) => {
@@ -45,13 +52,15 @@ const onAddDir = (dirPath) => {
   }
 };
 
-const onChange = (filePath) => {
+const onChange = (filePath, stats) => {
   const file = store.state.fileTree.findItemByPath(filePath);
+  database.updateFileLastModified(filePath, stats);
   file.makeThumbnail(true);
 };
 
 const onUnlink = (filePath) => {
   deleteFromFileTree(filePath);
+  database.deleteFileEntry(filePath);
 };
 
 const onUnlinkDir = (dirPath) => {

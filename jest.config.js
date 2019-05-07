@@ -12,6 +12,7 @@ module.exports = {
   },
   transformIgnorePatterns: [
     '/node_modules/',
+    '/dist_electron/',
   ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
