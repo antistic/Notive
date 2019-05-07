@@ -37,11 +37,22 @@ describe('database', () => {
       await database.db.close();
     });
 
-    it('should work', async () => {
-      await database.ensureFileEntry('testPath', { mtimeMs: 10 });
+    it.each([
+      [{ name: 'testPath', mtime: 10 }],
+      [{ name: 'testPath', mtime: 10 }, { name: 'testPath', mtime: 10 }],
+      [{ name: 'testPath', mtime: 10 }, { name: 'testPath', mtime: 20 }],
+    ])('returns correct id %#', async (files) => {
+      for (let i = 0; i < files.length; i += 1) {
+        const file = files[i];
 
-      const rows = await database.db.all(SQL`SELECT * FROM Files`);
-      expect(rows).toHaveLength(1);
+        /* eslint-disable no-await-in-loop */
+        const { id } = await database.ensureFileEntry(file.name, { mtimeMs: file.mtime });
+        const rows = await database.db.all(SQL`SELECT * FROM Files`);
+        /* eslint-enable no-await-in-loop */
+
+        expect(rows).toHaveLength(1);
+        expect(id).toBe(rows[0].id);
+      }
     });
 
     it('does not reinsert if not modified', async () => {

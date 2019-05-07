@@ -52,7 +52,7 @@ export default {
     }
 
     return {
-      id: row.fileId,
+      id: row.id,
       modified: false,
     };
   },
