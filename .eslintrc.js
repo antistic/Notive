@@ -8,6 +8,7 @@ module.exports = {
     'plugin:import/errors',
     'plugin:vue/essential',
     'plugin:jest/recommended',
+    'plugin:vue/recommended',
     '@vue/airbnb',
   ],
   rules: {

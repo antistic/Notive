@@ -1,19 +1,21 @@
 <template>
   <Modal @close="$emit('close')">
-      <div>
-        <h2>New directory name</h2>
-        <input
-          type="text"
-          ref="directoryNameInput"
-          name="directoryName"
-          id="directoryName"
-          v-model="newDirectoryName"
-          @keyup.enter="createNewDirectory"
-          :placeholder="placeholderName"
-        >
-        <button @click="createNewDirectory">Create directory</button>
-      </div>
-    </Modal>
+    <div>
+      <h2>New directory name</h2>
+      <input
+        id="directoryName"
+        ref="directoryNameInput"
+        v-model="newDirectoryName"
+        type="text"
+        name="directoryName"
+        :placeholder="placeholderName"
+        @keyup.enter="createNewDirectory"
+      >
+      <button @click="createNewDirectory">
+        Create directory
+      </button>
+    </div>
+  </Modal>
 </template>
 
 <script>
@@ -21,8 +23,13 @@ import Modal from '@/components/Modal.vue';
 import notebooks from '@/api/notebooks';
 
 export default {
-  props: ['parent'],
   components: { Modal },
+  props: {
+    parent: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
   data() {
     return {
       newDirectoryName: '',

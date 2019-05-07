@@ -1,22 +1,29 @@
 <template>
   <Modal @close="$emit('close')">
-      <div>
-        <h2>new image</h2>
-        <input
-          type="text"
-          name="imageName"
-          id="imageName"
-          v-model="newImageName"
-          @keyup.enter="createNewImage"
-          :placeholder="placeholderName"
-        >
-        <p>
-          {{ templatePath }}
-          <button @click="chooseTemplate">choose template</button>
-        </p>
-        <button :disabled="templatePath === ''"  @click="createNewImage">new image</button>
-      </div>
-    </Modal>
+    <div>
+      <h2>new image</h2>
+      <input
+        id="imageName"
+        v-model="newImageName"
+        type="text"
+        name="imageName"
+        :placeholder="placeholderName"
+        @keyup.enter="createNewImage"
+      >
+      <p>
+        {{ templatePath }}
+        <button @click="chooseTemplate">
+          choose template
+        </button>
+      </p>
+      <button
+        :disabled="templatePath === ''"
+        @click="createNewImage"
+      >
+        new image
+      </button>
+    </div>
+  </Modal>
 </template>
 
 <script>
@@ -25,8 +32,13 @@ import notebooks from '@/api/notebooks';
 import { showOpenDialog } from '@/utils/extensions';
 
 export default {
-  props: ['parent'],
   components: { Modal },
+  props: {
+    parent: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
   data() {
     return {
       newImageName: '',

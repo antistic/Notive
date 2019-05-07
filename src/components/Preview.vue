@@ -19,7 +19,9 @@
         :alt="imageName(imagePath)"
       >
     </div>
-    <p class="name">{{ name }}</p>
+    <p class="name">
+      {{ name }}
+    </p>
   </div>
 </template>
 
@@ -27,7 +29,20 @@
 import path from 'path';
 
 export default {
-  props: ['images', 'name', 'clickAction', 'previewType'],
+  props: {
+    images: {
+      type: Array,
+      default: () => [],
+    },
+    name: {
+      type: String,
+      default: '',
+    },
+    previewType: {
+      type: String,
+      default: '',
+    },
+  },
   methods: {
     imageName(imagePath) {
       return path.basename(imagePath.split('?m=')[0], '.png');

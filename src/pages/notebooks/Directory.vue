@@ -1,39 +1,47 @@
 <template>
   <div>
-    <h1>{{directory.name}}</h1>
+    <h1>{{ directory.name }}</h1>
 
     <IconButton
       v-if="directory.parent"
-      @click="() => showDirectory(directory.parent)"
       title="back"
       position="corner"
       icon="md-arrow-round-back"
+      @click="() => showDirectory(directory.parent)"
     />
 
     <div class="menu">
-      <IconButton @click="showNewDirectoryModal = true" title="new directory" icon="md-folder"/>
       <IconButton
-        @click="showNewImageModal = true"
+        title="new directory"
+        icon="md-folder"
+        @click="showNewDirectoryModal = true"
+      />
+      <IconButton
         title="new image from template"
         icon="md-bookmarks"
+        @click="showNewImageModal = true"
       />
-      <IconButton @click="showAddImagesModal = true" title="add image(s)" icon="md-add-circle"/>
+      <IconButton
+        title="add image(s)"
+        icon="md-add-circle"
+        @click="showAddImagesModal = true"
+      />
     </div>
 
     <NewDirectoryModal
       v-if="showNewDirectoryModal"
-      @close="showNewDirectoryModal = false"
       :parent="directory"
+      @close="showNewDirectoryModal = false"
     />
     <NewImageFromTemplateModal
       v-if="showNewImageModal"
-      @close="showNewImageModal = false"
       :parent="directory"
+      @close="showNewImageModal = false"
     />
     <AddImagesModal
       v-if="showAddImagesModal"
-      @close="showAddImagesModal = false"
       :parent="directory"
+      @close="showAddImagesModal = false"
     />
 
     <Gallery
@@ -53,13 +61,18 @@ import NewDirectoryModal from './modals/NewDirectory.vue';
 import NewImageFromTemplateModal from './modals/NewImageFromTemplate.vue';
 
 export default {
-  props: ['directory'],
   components: {
     Gallery,
     NewDirectoryModal,
     NewImageFromTemplateModal,
     AddImagesModal,
     IconButton,
+  },
+  props: {
+    directory: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   data() {
     return {

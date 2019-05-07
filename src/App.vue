@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <Loader :isReady="$store.ready">
+    <Loader :is-ready="$store.ready">
       <Notebooks :root="$store.state.fileTree" />
     </Loader>
   </div>

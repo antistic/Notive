@@ -1,6 +1,10 @@
 <template>
   <div class="gallery">
-    <Modal v-if="showImageModal" @close="showImageModal = false" modalType="image">
+    <Modal
+      v-if="showImageModal"
+      modal-type="image"
+      @close="showImageModal = false"
+    >
       <img :src="currentImage.path">
     </Modal>
 
@@ -24,8 +28,13 @@ import Preview from '@/components/Preview.vue';
 import Modal from '@/components/Modal.vue';
 
 export default {
-  props: ['contents'],
   components: { Preview, Modal },
+  props: {
+    contents: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       showImageModal: false,

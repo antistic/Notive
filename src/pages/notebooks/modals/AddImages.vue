@@ -4,9 +4,16 @@
       <h2>add image(s)</h2>
       <p>
         {{ imagePaths }}
-        <button @click="chooseImages">choose image(s)</button>
+        <button @click="chooseImages">
+          choose image(s)
+        </button>
       </p>
-      <button :disabled="imagePaths.length === 0" @click="addNewImages">add image(s)</button>
+      <button
+        :disabled="imagePaths.length === 0"
+        @click="addNewImages"
+      >
+        add image(s)
+      </button>
     </div>
   </Modal>
 </template>
@@ -17,8 +24,13 @@ import notebooks from '@/api/notebooks';
 import { showOpenDialog } from '@/utils/extensions';
 
 export default {
-  props: ['parent'],
   components: { Modal },
+  props: {
+    parent: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
   data() {
     return {
       imagePaths: [],

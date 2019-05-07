@@ -2,16 +2,27 @@
   <div>
     <IconButton
       v-if="file.parent"
-      @click="$emit('showDirectory', file.parent)"
       title="back"
       position="corner"
       icon="md-arrow-round-back"
+      @click="$emit('showDirectory', file.parent)"
     />
 
-    <Preview :images="[file.thumbnailPath]" :previewType="file.type" @click="openFile"/>
+    <Preview
+      :images="[file.thumbnailPath]"
+      :preview-type="file.type"
+      @click="openFile"
+    />
 
-    <Modal v-if="showImageModal" modalType="image" @close="showImageModal = false">
-      <img :src="`file:///${file.path}`" :alt="file.path">
+    <Modal
+      v-if="showImageModal"
+      modal-type="image"
+      @close="showImageModal = false"
+    >
+      <img
+        :src="`file:///${file.path}`"
+        :alt="file.path"
+      >
     </Modal>
   </div>
 </template>
@@ -24,8 +35,13 @@ import { isBrowserSupportedImage } from '@/utils/extensions';
 import { remote, shell } from 'electron';
 
 export default {
-  props: ['file'],
   components: { IconButton, Modal, Preview },
+  props: {
+    file: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
   data() {
     return {
       showImageModal: false,

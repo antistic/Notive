@@ -20,10 +20,15 @@ import File from '@/components/File.vue';
 import Directory from './Directory.vue';
 
 export default {
-  props: ['root'],
   components: {
     Directory,
     File,
+  },
+  props: {
+    root: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   data() {
     return {

@@ -6,7 +6,20 @@
 
 <script>
 export default {
-  props: ['icon', 'title', 'position'],
+  props: {
+    icon: {
+      type: String,
+      default: 'Warning',
+    },
+    title: {
+      type: String,
+      default: 'iconButton',
+    },
+    position: {
+      type: String,
+      default: '',
+    },
+  },
 };
 </script>
 

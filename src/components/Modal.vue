@@ -11,8 +11,13 @@
 import IconButton from '@/components/IconButton.vue';
 
 export default {
-  props: ['modalType'],
   components: { IconButton },
+  props: {
+    modalType: {
+      type: String,
+      default: '',
+    },
+  },
   methods: {
     hide() {
       this.$emit('close');
