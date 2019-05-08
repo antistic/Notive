@@ -5,7 +5,9 @@
       $listeners.click ? 'clickable' : '',
       `preview--${itemType}`
     ]"
+    tabindex="0"
     @click="$emit('click')"
+    @keypress.enter="$emit('click')"
   >
     <div
       :class="[
@@ -21,7 +23,10 @@
         :alt="imageName(imagePath)"
       >
     </div>
-    <p class="name">
+    <p
+      v-if="name"
+      class="name"
+    >
       {{ name }}
     </p>
   </div>
@@ -61,7 +66,10 @@ export default {
     cursor: pointer;
     transition: 0.1s ease-in-out all;
 
-    &:hover {
+    &:hover,
+    &:active,
+    &:focus {
+      outline: none;
       box-shadow: 10px 10px 0 $primary-light;
       transform: translate(-2px, -2px);
     }

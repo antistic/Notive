@@ -32,7 +32,7 @@ export default {
 .iconButton {
   padding: 0.3em;
   background: none;
-  border: 0;
+  border: 1px solid transparent;
 
   svg {
     fill: $primary-color;
@@ -49,7 +49,9 @@ export default {
     color: $primary-color;
   }
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
 
     .hover--move-left {
       transition: transform 0.2s;
@@ -59,6 +61,12 @@ export default {
     .hover--twitch {
       animation: twitch 0.5s;
     }
+  }
+
+  &:focus {
+    filter: drop-shadow(3px 3px 0 white);
+    border: 1px solid $primary-color;
+    outline: none;
   }
 }
 
