@@ -13,28 +13,27 @@ export default {
     return fs.mkdirp(newPath);
   },
 
-  addFile(parent, filePath) {
+  async addFile(parent, filePath) {
     const ext = path.extname(filePath);
     if (!isSupportedExtension(ext)) {
-      return Promise.reject(new Error('Unsupported file type'));
+      throw new Error('Unsupported file type');
     }
 
     const newPath = path.join(parent.path, path.basename(filePath));
-    return fs.copyFile(filePath, newPath);
+    await fs.copyFile(filePath, newPath);
   },
 
-  newFileFromTemplate(parent, fileName, templatePath) {
+  async newFileFromTemplate(parent, fileName, templatePath) {
     if (!fileName) {
-      return Promise.reject(new Error('No file name given'));
+      throw new Error('No file name given');
     }
     if (!templatePath) {
-      return Promise.reject(new Error('No file name given'));
+      throw new Error('No file name given');
     }
 
     const newPath = path.join(parent.path, fileName);
 
-    return fs
-      .copyFile(templatePath, newPath)
-      .then(() => shell.openItem(newPath));
+    await fs.copyFile(templatePath, newPath);
+    await shell.openItem(newPath);
   },
 };
