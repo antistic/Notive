@@ -134,10 +134,11 @@ export default {
 
     &::before {
       padding-bottom: 2em;
-      font-family: "Ionicons";
       font-size: 2em;
-      content: "\f30e";
-      background-color: rgb(224, 224, 224);
+      content: "";
+      background: linear-gradient( rgba(177, 177, 177, 0.5), rgba(177, 177, 177, 0.5) ),
+        no-repeat 50% 20%/20% url("../assets/ionicons/md-hammer.svg?external")
+        white;
       border: 3px dashed rgba(0, 0, 0, 0.3);
     }
 
