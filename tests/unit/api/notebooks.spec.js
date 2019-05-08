@@ -8,6 +8,10 @@ jest.mock('fs-extra');
 jest.mock('path');
 jest.mock('@/utils/extensions');
 jest.mock('@/api/fileWatcher/Directory');
+jest.mock('@/api/appPaths', () => ({
+  migrationsPath: 'public/migrations',
+}));
+
 
 const mockParent = new Directory(null, 'mockParentPath');
 

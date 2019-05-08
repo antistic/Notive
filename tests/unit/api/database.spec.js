@@ -3,6 +3,7 @@ import database from '@/api/database';
 
 jest.mock('@/api/appPaths', () => ({
   databasePath: ':memory:',
+  migrationsPath: 'public/migrations',
 }));
 
 describe('database', () => {

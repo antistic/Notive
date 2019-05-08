@@ -2,12 +2,6 @@
 const path = require('path');
 
 module.exports = {
-  configureWebpack: {
-    externals: {
-      sqlite3: 'commonjs sqlite3',
-      sharp: 'commonjs sharp',
-    },
-  },
   chainWebpack: (config) => {
     const svgRule = config.module.rule('svg');
 
@@ -33,7 +27,7 @@ module.exports = {
   },
   pluginOptions: {
     electronBuilder: {
-      customFileProtocol: 'file://./',
+      externals: ['sharp', 'sqlite'],
     },
   },
 };

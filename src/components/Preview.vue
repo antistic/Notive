@@ -17,7 +17,7 @@
       <img
         v-for="imagePath in images.slice(0, 4)"
         :key="imagePath"
-        :src="`file:///${imagePath}`"
+        :src="`notive://${imagePath}`"
         :alt="imageName(imagePath)"
       >
     </div>

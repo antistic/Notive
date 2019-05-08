@@ -12,3 +12,4 @@ export const appPaths = {
 };
 
 export const databasePath = path.join(appPaths.root, 'database.sqlite');
+export const migrationsPath = path.join(__static, 'migrations');

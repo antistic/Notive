@@ -3,6 +3,9 @@ module.exports = {
   env: {
     node: true,
   },
+  globals: {
+    __static: 'readonly',
+  },
   extends: [
     'eslint:recommended',
     'plugin:import/errors',

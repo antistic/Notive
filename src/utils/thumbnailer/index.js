@@ -19,7 +19,7 @@ export const getThumbnailPath = (itemPath, isFile = true) => {
 export const makeThumbnail = async (
   source,
   destination = this.getThumbnailPath(source),
-  timeoutLength = 2000,
+  timeoutLength = 500,
 ) => {
   const ext = path.extname(source);
 
