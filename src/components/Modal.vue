@@ -13,7 +13,7 @@
         options="top-right label-none"
         @click="hide"
       >
-        <CloseIcon class="white" />
+        <CloseIcon class="closeIcon ios" />
       </IconButton>
       <slot />
     </div>
@@ -22,7 +22,7 @@
 
 <script>
 import IconButton from '@/components/IconButton.vue';
-import CloseIcon from '@icons/md-close-circle-outline.svg';
+import CloseIcon from '@icons/ios-close.svg';
 
 export default {
   components: { IconButton, CloseIcon },
@@ -52,7 +52,7 @@ export default {
   width: 100vw;
   height: 100vh;
   cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(black, 0.2);
 
   .contents {
     position: relative;
@@ -84,5 +84,9 @@ export default {
       object-fit: scale-down;
     }
   }
+}
+
+.closeIcon {
+  background: radial-gradient(circle, white, white 55%, transparent 58%);
 }
 </style>

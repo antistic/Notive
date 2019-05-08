@@ -1,0 +1,9 @@
+$background-color: rgb(243, 243, 236);
+$text-color: rgb(104, 104, 104);
+$primary-color: rgb(60, 151, 136);
+$primary-light: lighten($primary-color, 40%);
+$primary-dark: darken($primary-color, 15%);
+
+$grey-light: rgb(211, 211, 211);
+$grey-mid: rgb(138, 138, 138);
+$grey-dark: rgb(70, 70, 70);

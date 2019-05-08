@@ -26,46 +26,53 @@
       >
     </Modal>
 
-    <h3>Metadata</h3>
-    <table class="metadata">
-      <tr
-        v-for="{attr_name, attr_data} in file.metadata"
-        :key="`${attr_name}-${attrData}`"
-      >
-        <td class="metadata-name">
-          {{ attr_name }}
-        </td>
-        <td class="metadata-data">
-          {{ attr_data }}
-        </td>
-      </tr>
+    <div class="metadata-container">
+      <h3>Metadata</h3>
+      <table class="metadata">
+        <tr
+          v-for="{attr_name, attr_data} in file.metadata"
+          :key="`${attr_name}-${attrData}`"
+        >
+          <td class="metadata-name">
+            {{ attr_name }}:
+          </td>
+          <td class="metadata-data">
+            <EditableField
+              :name="`${attrName}-data`"
+              :value="attr_data"
+              @submit="(value) => { editFileAttribute(attr_name, value) }"
+            />
+          </td>
+        </tr>
 
-      <tr>
-        <td>
-          <LabelledTextInput
-            v-model="attrName"
-            label="Name"
-          />
-        </td>
-        <td>
-          <LabelledTextInput
-            v-model="attrData"
-            label="Data"
-          />
-        </td>
-        <td>
-          <button @click="setFileAttribute">
-            add
-          </button>
-        </td>
-      </tr>
-    </table>
+        <tr>
+          <td>
+            <LabelledTextInput
+              v-model="attrName"
+              label="name"
+            />
+          </td>
+          <td>
+            <LabelledTextInput
+              v-model="attrData"
+              label="data"
+            />
+          </td>
+          <td>
+            <button @click="setFileAttribute">
+              add
+            </button>
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
 </template>
 
 <script>
 import IconButton from '@/components/IconButton.vue';
 import LabelledTextInput from '@/components/LabelledTextInput.vue';
+import EditableField from '@/components/EditableField.vue';
 import BackIcon from '@icons/md-arrow-round-back.svg';
 import Modal from '@/components/Modal.vue';
 import Preview from '@/components/Preview.vue';
@@ -76,6 +83,7 @@ export default {
   components: {
     IconButton,
     LabelledTextInput,
+    EditableField,
     BackIcon,
     Modal,
     Preview,
@@ -94,6 +102,9 @@ export default {
     };
   },
   methods: {
+    editFileAttribute(name, data) {
+      this.file.setAttribute(name, data);
+    },
     setFileAttribute() {
       this.file.setAttribute(this.attrName, this.attrData);
     },
@@ -134,17 +145,32 @@ export default {
   padding: 1em;
 }
 
-.metadata-name {
-  font-weight: bold;
-  text-align: right;
+.metadata-container {
+  padding: 2em;
+  margin-top: 2em;
+  background-color: white;
 
-  &:after {
-    content: ":";
+  h3 {
+    margin-top: 0;
+    text-align: center;
   }
 }
 
+.metadata-name {
+  font-weight: bold;
+  text-align: right;
+}
+
 .metadata td {
-  padding: 0 0.5em;
+  font-size: 12pt;
+
+  &:nth-child(2) {
+    min-width: 300px;
+  }
+}
+
+.metadata tr:not(:last-child) td:nth-child(1) {
+  padding-bottom: 6px;
 }
 
 .metadata tr:last-child {
@@ -152,6 +178,12 @@ export default {
 
   td {
     vertical-align: bottom;
+
+    .text-input {
+
+      box-sizing: border-box;
+      width: 100%;
+    }
   }
 }
 </style>

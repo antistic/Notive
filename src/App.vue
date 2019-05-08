@@ -28,26 +28,24 @@ export default {
     "Helvetica Neue",
     Helvetica,
     sans-serif;
-  color: rgb(95, 103, 110);
+  color: $text-color;
 }
 
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+  background: rgba(black, 0.05);
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #dfdfdf;
+  background-color: rgba(black, 0.1);
   background-clip: content-box;
-  border: 2px solid transparent;
-  border-radius: 20px;
 }
 
 html {
-  background-color: #fdfdfd;
+  background-color: $background-color;
 }
 
 body {
@@ -60,6 +58,23 @@ button {
 
 h1 {
   margin-top: 0;
+  font-size: 2.5em;
   text-align: center;
+  text-shadow: 3px 3px 0 white;
+}
+
+button {
+  padding: 0.5em 1em;
+  color: white;
+  background: $primary-color;
+  border: 0;
+  border-bottom: 6px solid $primary-dark;
+  border-radius: 3px;
+  transition: 0.1s all;
+
+  &:hover {
+    border-bottom-width: 2px;
+    transform: translateY(1px);
+  }
 }
 </style>

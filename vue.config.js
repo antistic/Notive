@@ -2,6 +2,13 @@
 const path = require('path');
 
 module.exports = {
+  css: {
+    loaderOptions: {
+      sass: {
+        data: '@import "~@/css/variables.scss";',
+      },
+    },
+  },
   chainWebpack: (config) => {
     const svgRule = config.module.rule('svg');
 

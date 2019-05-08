@@ -35,23 +35,18 @@ export default {
   border: 0;
 
   svg {
-    fill: rgb(72, 146, 136);
-    stroke: rgb(72, 146, 136);
+    fill: $primary-color;
+    stroke: $primary-color;
 
     &.ios {
       stroke-width: 4px;
-    }
-
-    &.white {
-      fill: white;
-      stroke: white;
     }
   }
 
   p {
     font-family: Calibri, sans-serif;
     font-weight: bold;
-    color: rgb(72, 146, 136);
+    color: $primary-color;
   }
 
   &:hover {
@@ -92,6 +87,7 @@ export default {
     transform: rotate(0);
   }
 }
+
 
 .iconButton.top-left {
   position: absolute;
@@ -142,6 +138,7 @@ export default {
 
   p {
     margin: 0;
+    margin-top: 0.5em;
     font-size: 1.3em;
   }
 }

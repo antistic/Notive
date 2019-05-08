@@ -62,8 +62,8 @@ export default {
     transition: 0.1s ease-in-out all;
 
     &:hover {
-      background-color: rgb(200, 225, 228);
-      border-color: rgba(0, 0, 0, 0.05);
+      box-shadow: 10px 10px 0 $primary-light;
+      transform: translate(-2px, -2px);
     }
   }
 
@@ -84,17 +84,24 @@ export default {
   }
 }
 
-.preview--directory {
-  width: 150px;
-  height: 150px;
-  padding: 15px;
-  background-color: rgb(224, 224, 224);
-  border: 1px solid rgb(148, 148, 148);
+.preview--directory,
+.preview--file {
+  box-sizing: border-box;
+  width: 180px;
+  height: 180px;
 }
 
-.preview--file {
-  width: 182px;
-  height: 182px;
+.preview--directory {
+  padding: 15px;
+  background-color: white;
+
+  &.clickable:hover {
+    border-color: white;
+  }
+
+  img {
+    border: 1px solid white;
+  }
 }
 
 .items-preview {
@@ -107,10 +114,10 @@ export default {
 
   img {
     position: relative;
+    box-sizing: border-box;
     display: block;
     width: 100%;
     height: 100%;
-    border: 1px solid white;
     object-fit: cover;
 
     &:hover {
@@ -136,16 +143,17 @@ export default {
       padding-bottom: 2em;
       font-size: 2em;
       content: "";
-      background: linear-gradient( rgba(177, 177, 177, 0.5), rgba(177, 177, 177, 0.5) ),
+      background: linear-gradient($grey-dark, $grey-dark),
         no-repeat 50% 20%/20% url("../assets/ionicons/md-hammer.svg?external")
-        white;
-      border: 3px dashed rgba(0, 0, 0, 0.3);
+        $grey-light;
+      background-blend-mode: lighten, normal;
+      border: 3px dashed rgba(black, 0.3);
     }
 
     &::after {
       padding: 0 1em;
       padding-top: 2.5em;
-      color: rgb(48, 48, 48);
+      color: $grey-dark;
       text-align: center;
       content: "unable to generate thumbnail for " attr(alt);
     }
