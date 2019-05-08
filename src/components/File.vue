@@ -21,7 +21,7 @@
       @close="showImageModal = false"
     >
       <img
-        :src="`notive:///${file.path}`"
+        :src="`notive://${file.path}`"
         :alt="file.path"
       >
     </Modal>
