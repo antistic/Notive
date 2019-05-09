@@ -1,23 +1,27 @@
 import fs from 'fs-extra';
 import path from 'path';
-import { getThumbnailPath, makeThumbnail } from '@/utils/thumbnailer';
+import makeThumbnail from '@/utils/thumbnailer';
 import database from '@/api/database';
+import appPaths from '@/api/appPaths';
 
 export default class File {
-  constructor(parent, filePath, fileId) {
+  constructor(parent, relativePath, fileId) {
     this.type = 'file';
 
     this.parent = parent;
 
-    this.path = filePath;
-    this.name = path.basename(filePath);
+    this.path = path.join(path.basename(appPaths.notebooks), relativePath);
+    this.name = path.basename(relativePath);
 
     this.id = fileId;
 
     this.metadata = [];
     this.getAttributes();
 
-    this.thumbnailPath = getThumbnailPath(this.path);
+    this._fullPath = path.join(appPaths.notebooks, relativePath);
+    this._fullThumbnailPath = `${path.join(appPaths.thumbnails, relativePath)}.png`;
+    this._thumbnailPath = `${path.join(path.basename(appPaths.thumbnails), relativePath)}.png`;
+    this.thumbnailPath = this._thumbnailPath;
     this.makeThumbnail();
   }
 
@@ -36,20 +40,19 @@ export default class File {
   }
 
   makeThumbnail(force = false) {
-    fs.pathExists(this.thumbnailPath).then((exists) => {
+    fs.pathExists(this._fullThumbnailPath).then((exists) => {
       if (force || !exists) {
-        const outputPath = getThumbnailPath(this.path);
-        fs.ensureDir(path.dirname(outputPath))
-          .then(() => makeThumbnail(this.path, outputPath))
+        fs.ensureDir(path.dirname(this._fullThumbnailPath))
+          .then(() => makeThumbnail(this._fullPath, this._fullThumbnailPath))
           .then(() => {
             // add current time to force url to change
-            this.thumbnailPath = `${outputPath}?m=${new Date().getTime()}`;
+            this.thumbnailPath = `${this._thumbnailPath}?m=${new Date().getTime()}`;
           });
       }
     });
   }
 
   clean() {
-    fs.remove(this.thumbnailPath);
+    fs.remove(this._fullThumbnailPath);
   }
 }

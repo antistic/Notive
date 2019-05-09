@@ -1,20 +1,15 @@
 import fs from 'fs-extra';
 import path from 'path';
-import { getThumbnailPath } from '@/utils/thumbnailer';
-import { appPaths } from '@/api/appPaths';
+import appPaths from '@/api/appPaths';
 
 export default class Directory {
-  constructor(parent, dirPath) {
+  constructor(parent, relativePath) {
     this.type = 'directory';
-    this._path = dirPath;
+    this.path = path.join(path.basename(appPaths.notebooks), relativePath);
     this.contents = [];
     this.parent = parent;
 
-    this.name = path.basename(dirPath);
-  }
-
-  get path() {
-    return this._path;
+    this.name = path.basename(relativePath);
   }
 
   addItem(item) {
@@ -29,14 +24,13 @@ export default class Directory {
     }
   }
 
-  findItemByPath(itemPath) {
-    const relativePath = path.relative(appPaths.notebooks, itemPath);
+  findItemByPath(relativePath) {
     const parts = relativePath.split(path.sep);
     return this.findItemByParts(parts);
   }
 
   findItemByParts([next, ...rest]) {
-    if (next === undefined || next === '') return this;
+    if (next === undefined || next === '.' || next === '') return this;
 
     const nextItem = this.contents.find(
       item => path.basename(item.path) === next,
@@ -51,7 +45,7 @@ export default class Directory {
       item.clean();
     });
 
-    const thumbnailPath = getThumbnailPath(this.path);
+    const thumbnailPath = path.join(appPaths.thumbnails, this.path);
     fs.remove(thumbnailPath);
   }
 }

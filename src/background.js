@@ -8,6 +8,7 @@ import {
   createProtocol,
   installVueDevtools,
 } from 'vue-cli-plugin-electron-builder/lib';
+import path from 'path';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -44,10 +45,23 @@ function createWindow() {
   });
 }
 
+function setupPaths() {
+  const userDataPath = path.join(app.getPath('documents'), app.getName());
+  global.appPaths = {
+    root: userDataPath,
+    notebooks: path.join(userDataPath, 'Notebooks'),
+    templates: path.join(userDataPath, 'Templates'),
+    thumbnails: path.join(userDataPath, 'Thumbnails'),
+    database: path.join(userDataPath, 'database.sqlite'),
+    databaseMigrations: path.join(__static, 'migrations'),
+  };
+}
+
 function registerProtocol() {
   protocol.registerFileProtocol('notive', (request, callback) => {
     let url = request.url.substr(9);
     url = url.split('?m=')[0];
+    url = path.join(global.appPaths.root, url);
     callback({ path: url });
   }, (error) => {
     if (error) {
@@ -89,6 +103,7 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString());
     }
   }
+  setupPaths();
   registerProtocol();
   createWindow();
 });

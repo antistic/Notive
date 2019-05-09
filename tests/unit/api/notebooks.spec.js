@@ -9,7 +9,7 @@ jest.mock('path');
 jest.mock('@/utils/extensions');
 jest.mock('@/api/fileWatcher/Directory');
 jest.mock('@/api/appPaths', () => ({
-  migrationsPath: 'public/migrations',
+  databaseMigrations: 'public/migrations',
 }));
 
 

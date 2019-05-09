@@ -1,4 +1,3 @@
-import { appPaths } from '@/api/appPaths';
 import makeKritaThumbnail from './krita';
 import makeSharpThumbnail from './sharp';
 import fs from 'fs-extra';
@@ -7,20 +6,7 @@ import path from 'path';
 import timers from 'timers';
 import util from 'util';
 
-export const getThumbnailPath = (itemPath, isFile = true) => {
-  let pathName = path.relative(appPaths.notebooks, itemPath);
-  if (isFile) {
-    pathName = `${pathName}.png`;
-  }
-
-  return path.resolve(appPaths.thumbnails, pathName);
-};
-
-export const makeThumbnail = async (
-  source,
-  destination = this.getThumbnailPath(source),
-  timeoutLength = 500,
-) => {
+export default async (source, destination, timeoutLength = 500) => {
   const ext = path.extname(source);
 
   const tmpdir = os.tmpdir();
@@ -40,6 +26,6 @@ export const makeThumbnail = async (
           await makeSharpThumbnail(source, destination);
       }
 
-      fs.unlink(tmpPath);
+      fs.remove(tmpPath);
     });
 };

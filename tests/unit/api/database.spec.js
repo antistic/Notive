@@ -2,8 +2,8 @@ import SQL from 'sql-template-strings';
 import database from '@/api/database';
 
 jest.mock('@/api/appPaths', () => ({
-  databasePath: ':memory:',
-  migrationsPath: 'public/migrations',
+  database: ':memory:',
+  databaseMigrations: 'public/migrations',
 }));
 
 describe('database', () => {

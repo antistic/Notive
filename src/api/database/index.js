@@ -1,13 +1,13 @@
 import sqlite from 'sqlite';
 import SQL from 'sql-template-strings';
-import { databasePath, migrationsPath } from '@/api/appPaths';
+import appPaths from '@/api/appPaths';
 
 export default {
   async setup() {
-    const db = await sqlite.open(databasePath);
+    const db = await sqlite.open(appPaths.database);
 
     await db.migrate({
-      migrationsPath,
+      migrationsPath: appPaths.databaseMigrations,
     });
 
     await db.get(SQL`PRAGMA foreign_keys = ON`);

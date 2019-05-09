@@ -1,33 +1,15 @@
-import { getThumbnailPath, makeThumbnail } from '@/utils/thumbnailer';
+import makeThumbnail from '@/utils/thumbnailer';
 import * as makeKritaThumbnail from '@/utils/thumbnailer/krita';
 import * as makeSharpThumbnail from '@/utils/thumbnailer/sharp';
-import os from 'os';
 
 jest.unmock('path');
 jest.mock('fs-extra');
 jest.mock('yauzl');
 jest.mock('@/api/appPaths', () => ({
-  appPaths: {
-    notebooks: 'mockNotebooksPath',
-  },
+  notebooks: 'mockNotebooksPath',
 }));
 
 describe('thumbnailer', () => {
-  describe('getThumbnailPath', () => {
-    it('creates the correct path', () => {
-      if (os.platform === 'win32') {
-        expect(getThumbnailPath('testFile.jpg', true))
-          .toBe('mockNotebooksPath/testFile.jpg.png');
-
-        expect(getThumbnailPath('testFile.png'))
-          .toBe('mockNotebooksPath/testFile.png.png');
-
-        expect(getThumbnailPath('testDirectory', false))
-          .toBe('mockNotebooksPath/testDirectory');
-      }
-    });
-  });
-
   describe('makeThumbnail', () => {
     it('calls the right thumbnailer for .kra files', async () => {
       const spy = jest.spyOn(makeKritaThumbnail, 'default');

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>{{ directory.name }}</h1>
+    <h1>{{ directory.name || 'Notebooks' }}</h1>
 
     <IconButton
       v-if="directory.parent"
