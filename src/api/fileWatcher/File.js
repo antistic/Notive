@@ -25,8 +25,13 @@ export default class File {
     this.metadata = await database.getFileAttributes(this.id);
   }
 
-  async setAttribute(name, data) {
-    await database.setFileAttributeData(this.id, name, data);
+  async addAttribute(name, data) {
+    await database.addFileAttributeData(this.id, name, data);
+    await this.getAttributes();
+  }
+
+  async editAttribute(name, data) {
+    await database.editFileAttributeData(this.id, name, data);
     await this.getAttributes();
   }
 

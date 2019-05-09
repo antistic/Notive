@@ -95,7 +95,7 @@ describe('database', () => {
 
     it('removes the associated attributes from Files', async () => {
       const { id } = await database.ensureFileEntry('testPath', { mtimeMs: 10 });
-      await (database.setFileAttributeData(id, 'testAttribute', 'testData'));
+      await (database.addFileAttributeData(id, 'testAttribute', 'testData'));
       await (database.deleteFileEntry('testPath'));
 
       const rows = await database.db.all(SQL`SELECT * FROM Attributes`);
@@ -112,8 +112,50 @@ describe('database', () => {
     });
   });
 
+  describe('addFileAttributeData', () => {
+    beforeEach(async () => {
+      await database.setup();
+    });
 
-  describe('setFileAttributeData', () => {
+    afterEach(async () => {
+      await database.db.close();
+    });
+
+    it('adds the attribute to the Attributes table', async () => {
+      const { id } = await database.ensureFileEntry('testPath', { mtimeMs: 10 });
+
+      await expect(database.addFileAttributeData(id, 'testAttribute', 'testData'))
+        .resolves.toBeUndefined();
+
+      const rows = await database.db.all(SQL`SELECT * FROM Attributes`);
+
+      expect(rows).toHaveLength(1);
+      expect(rows[0]).toHaveProperty('attr_name', 'testAttribute');
+      expect(rows[0]).toHaveProperty('attr_data', 'testData');
+    });
+
+    it('adds the attribute to the AttributesMeta', async () => {
+      const { id } = await database.ensureFileEntry('testPath', { mtimeMs: 10 });
+
+      await expect(database.addFileAttributeData(id, 'testAttribute', 'testData'))
+        .resolves.toBeUndefined();
+
+      const rows = await database.db.all(SQL`SELECT * FROM AttributesMeta`);
+
+      expect(rows).toHaveLength(1);
+      expect(rows[0]).toHaveProperty('name', 'testAttribute');
+    });
+
+    it('fails if you set an attribute that already exists on the file', async () => {
+      const { id } = await database.ensureFileEntry('testPath', { mtimeMs: 10 });
+
+      await database.addFileAttributeData(id, 'testAttribute', 'testData');
+      await expect(database.addFileAttributeData(id, 'testAttribute', 'testData'))
+        .rejects.toThrow();
+    });
+  });
+
+  describe('editFileAttributeData', () => {
     beforeEach(async () => {
       await database.setup();
     });
@@ -125,7 +167,8 @@ describe('database', () => {
     it('sets the attribute', async () => {
       const { id } = await database.ensureFileEntry('testPath', { mtimeMs: 10 });
 
-      await expect(database.setFileAttributeData(id, 'testAttribute', 'testData'))
+      await database.addFileAttributeData(id, 'testAttribute', 'dataToOverwrite');
+      await expect(database.editFileAttributeData(id, 'testAttribute', 'testData'))
         .resolves.toBeUndefined();
 
       const rows = await database.db.all(SQL`SELECT * FROM Attributes`);
@@ -133,6 +176,13 @@ describe('database', () => {
       expect(rows).toHaveLength(1);
       expect(rows[0]).toHaveProperty('attr_name', 'testAttribute');
       expect(rows[0]).toHaveProperty('attr_data', 'testData');
+    });
+
+    it('fails if the attribute does not exist', async () => {
+      const { id } = await database.ensureFileEntry('testPath', { mtimeMs: 10 });
+
+      await expect(database.editFileAttributeData(id, 'testAttribute', 'testData'))
+        .rejects.toThrow();
     });
   });
 
@@ -147,10 +197,10 @@ describe('database', () => {
 
     it('gets the attributes', async () => {
       const { id: id1 } = await database.ensureFileEntry('testPath1', { mtimeMs: 10 });
-      await database.setFileAttributeData(id1, 'testAttribute', 'testData1');
+      await database.addFileAttributeData(id1, 'testAttribute', 'testData1');
 
       const { id: id2 } = await database.ensureFileEntry('testPath2', { mtimeMs: 20 });
-      await database.setFileAttributeData(id2, 'testAttribute', 'testData2');
+      await database.addFileAttributeData(id2, 'testAttribute', 'testData2');
 
       const rows = await database.getFileAttributes(id1);
 

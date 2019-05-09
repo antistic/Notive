@@ -32,6 +32,7 @@
         <tr
           v-for="{attr_name, attr_data} in file.metadata"
           :key="`${attr_name}-${attrData}`"
+          class="attribute"
         >
           <td class="metadata-name">
             {{ attr_name }}:
@@ -45,7 +46,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr class="addRow">
           <td>
             <LabelledTextInput
               v-model="attrName"
@@ -59,9 +60,18 @@
             />
           </td>
           <td>
-            <button @click="setFileAttribute">
+            <button @click="addFileAttribute">
               add
             </button>
+          </td>
+        </tr>
+
+        <tr>
+          <td
+            colspan="3"
+            class="error"
+          >
+            {{ addErrorMessage }}
           </td>
         </tr>
       </table>
@@ -99,14 +109,26 @@ export default {
       showImageModal: false,
       attrName: '',
       attrData: '',
+      addErrorMessage: 'bloop test',
     };
   },
   methods: {
     editFileAttribute(name, data) {
-      this.file.setAttribute(name, data);
+      this.file.editAttribute(name, data);
     },
-    setFileAttribute() {
-      this.file.setAttribute(this.attrName, this.attrData);
+    addFileAttribute() {
+      this.file.addAttribute(this.attrName, this.attrData)
+        .then(() => { this.addErrorMessage = ''; })
+        .catch((error) => {
+          switch (error.message) {
+            case 'SQLITE_CONSTRAINT: UNIQUE constraint failed: Attributes.file_id, Attributes.attr_name':
+              this.addErrorMessage = `'${this.attrName}' already exists (maybe you meant to edit?)`;
+              break;
+            default:
+
+              this.addErrorMessage = error.message;
+          }
+        });
     },
     openFile() {
       if (isBrowserSupportedImage(this.file.path)) {
@@ -169,11 +191,11 @@ export default {
   }
 }
 
-.metadata tr:not(:last-child) td:nth-child(1) {
+.metadata .attribute td:nth-child(1) {
   padding-bottom: 6px;
 }
 
-.metadata tr:last-child {
+.metadata .addRow {
   height: 4em;
 
   td {
@@ -185,5 +207,11 @@ export default {
       width: 100%;
     }
   }
+}
+
+.metadata .error {
+  font-weight: bold;
+  color: red;
+  text-align: center;
 }
 </style>

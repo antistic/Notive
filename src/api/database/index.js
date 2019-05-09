@@ -73,17 +73,27 @@ export default {
     `);
   },
 
-  async setFileAttributeData(fileId, attributeName, attributeData) {
+  async addFileAttributeData(fileId, attributeName, attributeData) {
     await this.db.run(SQL`
       INSERT OR IGNORE
       INTO AttributesMeta (name)
       VALUES (${attributeName})
     `);
     await this.db.run(SQL`
-      INSERT OR REPLACE
+      INSERT
       INTO Attributes (file_id, attr_name, attr_data)
       VALUES (${fileId}, ${attributeName}, ${attributeData})
     `);
+  },
+
+  async editFileAttributeData(fileId, attributeName, attributeData) {
+    const result = await this.db.run(SQL`
+      UPDATE Attributes
+      SET attr_data=${attributeData}
+      WHERE file_id = ${fileId} AND attr_name = ${attributeName}
+    `);
+
+    if (result.stmt.changes === 0) throw new Error('Attribute does not exist');
   },
 
   getFileAttributes(fileId) {
