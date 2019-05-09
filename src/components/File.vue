@@ -109,7 +109,7 @@ export default {
       showImageModal: false,
       attrName: '',
       attrData: '',
-      addErrorMessage: 'bloop test',
+      addErrorMessage: '',
     };
   },
   methods: {
