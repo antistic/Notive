@@ -72,8 +72,11 @@ button {
   border-radius: 3px;
   transition: 0.1s all;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     border-bottom-width: 2px;
+    outline: none;
     transform: translateY(1px);
   }
 }
