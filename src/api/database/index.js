@@ -1,9 +1,13 @@
 import sqlite from 'sqlite';
 import SQL from 'sql-template-strings';
 import appPaths from '@/api/appPaths';
+import fs from 'fs-extra';
+import path from 'path';
 
 export default {
   async setup() {
+    fs.ensureDir(path.dirname(appPaths.database));
+
     const db = await sqlite.open(appPaths.database);
 
     await db.migrate({
