@@ -36,6 +36,11 @@ export default class File extends Item {
     await this.getAttributes();
   }
 
+  async deleteAttribute(name) {
+    await database.deleteFileAttributeData(this.id, name);
+    await this.getAttributes();
+  }
+
   async makeThumbnail(force = false) {
     const exists = await fs.pathExists(this._fullThumbnailPath);
 

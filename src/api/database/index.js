@@ -100,6 +100,13 @@ export default {
     if (result.stmt.changes === 0) throw new Error('Attribute does not exist');
   },
 
+  async deleteFileAttributeData(fileId, attributeName) {
+    await this.db.run(SQL`
+      DELETE FROM Attributes
+      WHERE file_id = ${fileId} AND attr_name = ${attributeName}
+    `);
+  },
+
   getFileAttributes(fileId) {
     return this.db.all(SQL`
       SELECT *

@@ -44,6 +44,15 @@
               @submit="(value) => { editFileAttribute(attr_name, value) }"
             />
           </td>
+          <td class="metadata-actions">
+            <IconButton
+              options="grey inline-small"
+              text=""
+              @click="() => deleteFileAttribute(attr_name)"
+            >
+              <DeleteIcon />
+            </IconButton>
+          </td>
         </tr>
 
         <tr class="addRow">
@@ -84,6 +93,7 @@ import IconButton from '@/components/IconButton.vue';
 import LabelledTextInput from '@/components/LabelledTextInput.vue';
 import EditableField from '@/components/EditableField.vue';
 import BackIcon from '@icons/md-arrow-round-back.svg';
+import DeleteIcon from '@icons/md-trash.svg';
 import Modal from '@/components/Modal.vue';
 import Preview from '@/components/Preview.vue';
 import { isBrowserSupportedImage } from '@/utils/extensions';
@@ -95,6 +105,7 @@ export default {
     LabelledTextInput,
     EditableField,
     BackIcon,
+    DeleteIcon,
     Modal,
     Preview,
   },
@@ -115,6 +126,9 @@ export default {
   methods: {
     editFileAttribute(name, data) {
       this.file.editAttribute(name, data);
+    },
+    deleteFileAttribute(name) {
+      this.file.deleteAttribute(name);
     },
     addFileAttribute() {
       this.file.addAttribute(this.attrName, this.attrData)

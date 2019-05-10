@@ -6,7 +6,9 @@
     <slot>
       <WarningIcon />
     </slot>
-    <p>{{ text }}</p>
+    <p v-if="text">
+      {{ text }}
+    </p>
   </button>
 </template>
 
@@ -148,6 +150,26 @@ export default {
     margin: 0;
     margin-top: 0.5em;
     font-size: 1.3em;
+  }
+}
+
+.iconButton.inline-small {
+
+  svg {
+    height: 1.5em;
+    padding: 0;
+  }
+}
+
+.iconButton.grey {
+
+  svg {
+    fill: $grey-mid;
+    stroke: $grey-mid;
+  }
+
+  p {
+    color: $grey-mid;
   }
 }
 </style>

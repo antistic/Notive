@@ -186,6 +186,28 @@ describe('database', () => {
     });
   });
 
+  describe('deleteFileAttributeData', () => {
+    beforeEach(async () => {
+      await database.setup();
+    });
+
+    afterEach(async () => {
+      await database.db.close();
+    });
+
+    it('deletes the attribute', async () => {
+      const { id } = await database.ensureFileEntry('testPath', { mtimeMs: 10 });
+
+      await database.addFileAttributeData(id, 'testAttribute', 'dataToOverwrite');
+      await expect(database.deleteFileAttributeData(id, 'testAttribute'))
+        .resolves.toBeUndefined();
+
+      const rows = await database.db.all(SQL`SELECT * FROM Attributes`);
+
+      expect(rows).toHaveLength(0);
+    });
+  });
+
   describe('getFileAttributes', () => {
     beforeEach(async () => {
       await database.setup();
