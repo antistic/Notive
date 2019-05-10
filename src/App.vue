@@ -62,22 +62,4 @@ h1 {
   text-align: center;
   text-shadow: 3px 3px 0 white;
 }
-
-button {
-  padding: 0.5em 1em;
-  color: white;
-  background: $primary-color;
-  border: 0;
-  border-bottom: 6px solid $primary-dark;
-  border-radius: 3px;
-  transition: 0.1s all;
-
-  &:hover,
-  &:active,
-  &:focus {
-    border-bottom-width: 2px;
-    outline: none;
-    transform: translateY(1px);
-  }
-}
 </style>

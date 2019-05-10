@@ -190,23 +190,33 @@ export default {
     margin-top: 0;
     text-align: center;
   }
-}
 
-.metadata-name {
-  font-weight: bold;
-  text-align: right;
-}
+  td {
+    font-size: 12pt;
+  }
 
-.metadata td {
-  font-size: 12pt;
+  .metadata-name {
+    padding-bottom: 6px;
+    font-weight: bold;
+    text-align: right;
+  }
 
-  &:nth-child(2) {
+  .metadata-data {
     min-width: 300px;
+  }
+
+  .metadata-actions {
+    padding-bottom: 3px;
   }
 }
 
-.metadata .attribute td:nth-child(1) {
-  padding-bottom: 6px;
+tr .metadata-actions button {
+  opacity: 0;
+  transition: 0.2s opacity;
+}
+
+tr:hover .metadata-actions button {
+  opacity: 1;
 }
 
 .metadata .addRow {
@@ -219,6 +229,24 @@ export default {
 
       box-sizing: border-box;
       width: 100%;
+    }
+  }
+
+  button {
+    padding: 0.5em 1em;
+    color: white;
+    background: $primary-color;
+    border: 0;
+    border-bottom: 6px solid $primary-dark;
+    border-radius: 3px;
+    transition: 0.1s all;
+
+    &:hover,
+    &:active,
+    &:focus {
+      border-bottom-width: 2px;
+      outline: none;
+      transform: translateY(1px);
     }
   }
 }
