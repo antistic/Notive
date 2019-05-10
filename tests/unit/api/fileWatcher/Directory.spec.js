@@ -39,11 +39,24 @@ describe('Directory', () => {
   });
 
   describe('delete', () => {
-    it('deletes File', () => {
+    it('deletes Directory', () => {
       const parent = new Directory('.');
-      const file = parent.addFile('newFile', 1);
+      const dir = parent.addDirectory(path.join('.', 'newDir'));
 
-      file.delete();
+      dir.delete();
+
+      expect(parent.contents).toEqual([]);
+    });
+
+    it('deletes Directory with items', () => {
+      const parent = new Directory('');
+      const dir = parent.addDirectory(path.join('.', 'newDir'));
+      parent.addFile(
+        path.join('.', 'newDir', 'newFile'),
+        1,
+      );
+
+      dir.delete();
 
       expect(parent.contents).toEqual([]);
     });
@@ -52,7 +65,7 @@ describe('Directory', () => {
   describe('addFile/addDirectory', () => {
     it('adds direct child file', () => {
       const parent = new Directory('');
-      const child = parent.addFile(path.join('.', 'newFile'));
+      const child = parent.addFile(path.join('.', 'newFile'), 1);
 
       expect(parent.contents).toEqual(
         expect.arrayContaining([child]),
@@ -61,11 +74,23 @@ describe('Directory', () => {
       expect(child).toHaveProperty('name', 'newFile');
     });
 
+    it('adds direct child directory', () => {
+      const parent = new Directory('');
+      const child = parent.addDirectory(path.join('.', 'newDir'));
+
+      expect(parent.contents).toEqual(
+        expect.arrayContaining([child]),
+      );
+      expect(child).toHaveProperty('parent', parent);
+      expect(child).toHaveProperty('name', 'newDir');
+    });
+
     it('adds nested child file', () => {
       const parent = new Directory('');
       const dir = parent.addDirectory(path.join('.', 'newDir'));
       const file = parent.addFile(
         path.join('.', 'newDir', 'newFile'),
+        1,
       );
 
       expect(parent.contents).toEqual(
@@ -107,6 +132,24 @@ describe('Directory', () => {
       );
       expect(fs.remove).toHaveBeenCalledWith(
         path.join(appPaths.thumbnails, 'newDir'),
+      );
+    });
+
+    it('deletes nested child file', () => {
+      const parent = new Directory('');
+      const dir = parent.addDirectory(path.join('.', 'newDir'));
+      const file = parent.addFile(
+        path.join('.', 'newDir', 'newFile'),
+        1,
+      );
+
+      parent.deleteChildPath(file._relativePath);
+
+      expect(parent.contents).toEqual(
+        expect.arrayContaining([dir]),
+      );
+      expect(dir.contents).not.toEqual(
+        expect.arrayContaining([file]),
       );
     });
   });
