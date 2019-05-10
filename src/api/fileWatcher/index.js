@@ -40,7 +40,13 @@ const onChange = (filePath, stats) => {
 
 const onUnlink = (filePath) => {
   const relativePath = path.relative(appPaths.notebooks, filePath);
-  store.state.fileTree.deleteChildPath(relativePath);
+  try {
+    store.state.fileTree.deleteChildPath(relativePath);
+  } catch (e) {
+    if (e.message === "Cannot read property '_findItemByParts' of undefined") {
+      // pass since it's likely the parent directory was deleted first
+    }
+  }
   database.deleteFileEntry(filePath);
 };
 
