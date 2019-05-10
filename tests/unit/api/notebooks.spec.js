@@ -6,14 +6,14 @@ import notebooks from '@/api/notebooks';
 
 jest.mock('fs-extra');
 jest.mock('path');
+jest.mock('@/api/fileWatcher/Directory', () => require('@/api/fileWatcher/Item'));
 jest.mock('@/utils/extensions');
-jest.mock('@/api/fileWatcher/Directory');
 jest.mock('@/api/appPaths', () => ({
   databaseMigrations: 'public/migrations',
 }));
 
 
-const mockParent = new Directory(null, 'mockParentPath');
+const mockParent = new Directory('mockParentPath');
 
 describe('notebooks', () => {
   describe('newDirectory', () => {

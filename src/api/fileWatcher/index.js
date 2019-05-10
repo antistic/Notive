@@ -1,4 +1,3 @@
-import File from './File';
 import Directory from './Directory';
 import chokidar from 'chokidar';
 import fs from 'fs-extra';
@@ -8,41 +7,14 @@ import appPaths from '@/api/appPaths';
 import database from '@/api/database';
 import store from '@/api/store';
 
-/* ----- helper methods */
-
-function addToFileTree(itemType, relativePath, fileId) {
-  const parentPath = path.dirname(relativePath);
-  const parentItem = store.state.fileTree.findItemByPath(parentPath);
-
-  let item;
-  switch (itemType) {
-    case 'file':
-      item = new File(parentItem, relativePath, fileId);
-      break;
-    case 'directory':
-      item = new Directory(parentItem, relativePath);
-      break;
-    default:
-      throw new Error('Found neither file nor directory');
-  }
-
-  parentItem.addItem(item);
-  return item;
-}
-
-function deleteFromFileTree(itemPath) {
-  const relativePath = path.relative(appPaths.notebooks, itemPath);
-  const parentItem = store.state.fileTree.findItemByPath(path.dirname(relativePath));
-  if (parentItem) parentItem.deleteItem(path.join(path.basename(appPaths.notebooks), relativePath));
-}
-
 /* ----- watcher methods */
 
 const onAdd = (filePath, stats) => {
   const relativePath = path.relative(appPaths.notebooks, filePath);
   database.ensureFileEntry(relativePath, stats)
     .then(({ id, modified }) => {
-      const file = addToFileTree('file', relativePath, id);
+      const file = store.state.fileTree.addFile(relativePath, id);
+      file.getAttributes();
       if (modified) {
         file.makeThumbnail(true);
       }
@@ -52,23 +24,26 @@ const onAdd = (filePath, stats) => {
 const onAddDir = (dirPath) => {
   if (dirPath !== appPaths.notebooks) {
     const relativePath = path.relative(appPaths.notebooks, dirPath);
-    addToFileTree('directory', relativePath);
+    store.state.fileTree.addDirectory(relativePath);
   }
 };
 
 const onChange = (filePath, stats) => {
-  const file = store.state.fileTree.findItemByPath(filePath);
+  const relativePath = path.relative(appPaths.notebooks, filePath);
+  const file = store.state.fileTree.findChildPath(relativePath);
   database.updateFileLastModified(filePath, stats);
   file.makeThumbnail(true);
 };
 
 const onUnlink = (filePath) => {
-  deleteFromFileTree(filePath);
+  const relativePath = path.relative(appPaths.notebooks, filePath);
+  store.state.fileTree.deleteChildPath(relativePath);
   database.deleteFileEntry(filePath);
 };
 
 const onUnlinkDir = (dirPath) => {
-  deleteFromFileTree(dirPath);
+  const relativePath = path.relative(appPaths.notebooks, dirPath);
+  store.state.fileTree.deleteChildPath(relativePath);
 };
 
 export default {
@@ -77,7 +52,7 @@ export default {
       dirName => fs.ensureDir(appPaths[dirName]),
     ));
 
-    store.state.fileTree = new Directory(null, '');
+    store.state.fileTree = new Directory('');
 
     await new Promise((resolve, _) => {
       const watcher = chokidar.watch(appPaths.notebooks, {

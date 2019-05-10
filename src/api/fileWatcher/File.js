@@ -1,28 +1,25 @@
+import Item from './Item';
 import fs from 'fs-extra';
 import path from 'path';
 import makeThumbnail from '@/utils/thumbnailer';
 import database from '@/api/database';
 import appPaths from '@/api/appPaths';
 
-export default class File {
-  constructor(parent, relativePath, fileId) {
+export default class File extends Item {
+  constructor(relativePath, fileId) {
+    super(relativePath);
+
     this.type = 'file';
-
-    this.parent = parent;
-
-    this.path = path.join(path.basename(appPaths.notebooks), relativePath);
-    this.name = path.basename(relativePath);
-
     this.id = fileId;
 
     this.metadata = [];
-    this.getAttributes();
 
-    this._fullPath = path.join(appPaths.notebooks, relativePath);
-    this._fullThumbnailPath = `${path.join(appPaths.thumbnails, relativePath)}.png`;
     this._thumbnailPath = `${path.join(path.basename(appPaths.thumbnails), relativePath)}.png`;
     this.thumbnailPath = this._thumbnailPath;
-    this.makeThumbnail();
+  }
+
+  _clean() {
+    fs.remove(this._getFullThumbnailPath());
   }
 
   async getAttributes() {
@@ -39,20 +36,21 @@ export default class File {
     await this.getAttributes();
   }
 
-  makeThumbnail(force = false) {
-    fs.pathExists(this._fullThumbnailPath).then((exists) => {
-      if (force || !exists) {
-        fs.ensureDir(path.dirname(this._fullThumbnailPath))
-          .then(() => makeThumbnail(this._fullPath, this._fullThumbnailPath))
-          .then(() => {
-            // add current time to force url to change
-            this.thumbnailPath = `${this._thumbnailPath}?m=${new Date().getTime()}`;
-          });
-      }
-    });
+  async makeThumbnail(force = false) {
+    const exists = await fs.pathExists(this._fullThumbnailPath);
+
+    if (force || !exists) {
+      const fullPath = path.join(appPaths.notebooks, this._relativePath);
+      const fullThumbnailPath = this._getFullThumbnailPath();
+
+      await fs.ensureDir(path.dirname(fullThumbnailPath));
+      await makeThumbnail(fullPath, fullThumbnailPath);
+      // add current time to force url to change
+      this.thumbnailPath = `${this._thumbnailPath}?m=${Date.now()}`;
+    }
   }
 
-  clean() {
-    fs.remove(this._fullThumbnailPath);
+  _getFullThumbnailPath() {
+    return `${path.join(appPaths.thumbnails, this._relativePath)}.png`;
   }
 }

@@ -1,51 +1,75 @@
+import Item from './Item';
+import File from './File';
 import fs from 'fs-extra';
 import path from 'path';
 import appPaths from '@/api/appPaths';
 
-export default class Directory {
-  constructor(parent, relativePath) {
-    this.type = 'directory';
-    this.path = path.join(path.basename(appPaths.notebooks), relativePath);
-    this.contents = [];
-    this.parent = parent;
+export default class Directory extends Item {
+  constructor(relativePath) {
+    super(relativePath);
 
-    this.name = path.basename(relativePath);
+    this.type = 'directory';
+    this.contents = [];
   }
 
-  addItem(item) {
+  _clean() {
+    const thumbnailPath = path.join(appPaths.thumbnails, this._relativePath);
+    fs.remove(thumbnailPath);
+  }
+
+  _addChild(item) {
     this.contents.push(item);
   }
 
-  deleteItem(itemPath) {
-    const index = this.contents.findIndex(item => item.path === itemPath);
+  addFile(relativePath, fileId) {
+    const item = new File(relativePath, fileId);
+    this._addItem(item);
+    return item;
+  }
+
+  addDirectory(relativePath) {
+    const item = new Directory(relativePath);
+    this._addItem(item);
+    return item;
+  }
+
+  _addItem(item) {
+    const parentPath = path.dirname(item._relativePath);
+    const parentItem = this.findChildPath(parentPath);
+    parentItem._addChild(item);
+    item.setParent(parentItem);
+  }
+
+  _deleteChild(item) {
+    const index = this.contents.findIndex(
+      child => child.path === item.path,
+    );
     if (index > -1) {
-      this.contents[index].clean();
+      this.contents[index]._clean();
       this.contents.splice(index, 1);
     }
   }
 
-  findItemByPath(relativePath) {
-    const parts = relativePath.split(path.sep);
-    return this.findItemByParts(parts);
+  deleteChildPath(relativePath) {
+    const item = this.findChildPath(relativePath);
+    if (item) {
+      item.delete();
+    }
   }
 
-  findItemByParts([next, ...rest]) {
-    if (next === undefined || next === '.' || next === '') return this;
+  findChildPath(relativePath) {
+    const parts = relativePath.split(path.sep);
+    return this._findItemByParts(parts);
+  }
+
+  _findItemByParts([next, ...rest]) {
+    if (next === '.') return this;
 
     const nextItem = this.contents.find(
-      item => path.basename(item.path) === next,
+      item => item.name === next,
     );
 
     if (rest.length === 0) return nextItem;
-    return nextItem.findItemByParts(rest);
-  }
-
-  clean() {
-    this.contents.forEach((item) => {
-      item.clean();
-    });
-
-    const thumbnailPath = path.join(appPaths.thumbnails, this.path);
-    fs.remove(thumbnailPath);
+    return nextItem._findItemByParts(rest);
   }
 }
