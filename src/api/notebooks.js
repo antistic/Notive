@@ -9,7 +9,7 @@ export default {
       return Promise.reject(new Error('Directory name is empty'));
     }
 
-    const newPath = path.join(parent.path, newDirectoryName);
+    const newPath = path.join(parent.fullPath, newDirectoryName);
     return fs.mkdirp(newPath);
   },
 
@@ -19,7 +19,7 @@ export default {
       throw new Error('Unsupported file type');
     }
 
-    const newPath = path.join(parent.path, path.basename(filePath));
+    const newPath = path.join(parent.fullPath, path.basename(filePath));
     await fs.copyFile(filePath, newPath);
   },
 
@@ -31,7 +31,7 @@ export default {
       throw new Error('No file name given');
     }
 
-    const newPath = path.join(parent.path, fileName);
+    const newPath = path.join(parent.fullPath, fileName);
 
     await fs.copyFile(templatePath, newPath);
     await shell.openItem(newPath);

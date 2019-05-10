@@ -3,15 +3,21 @@ import { shell } from 'electron';
 import { isSupportedExtension } from '@/utils/extensions';
 import Directory from '@/api/fileWatcher/Directory';
 import notebooks from '@/api/notebooks';
+import path from 'path';
+import appPaths from '@/api/appPaths';
 
 jest.mock('fs-extra');
-jest.mock('path');
 jest.mock('@/api/fileWatcher/Directory', () => require('@/api/fileWatcher/Item'));
 jest.mock('@/utils/extensions');
-jest.mock('@/api/appPaths', () => ({
-  databaseMigrations: 'public/migrations',
-}));
+jest.mock('@/api/appPaths', () => {
+  const path_ = require('path');
 
+  return {
+    notebooks: path_.join('/', 'root', 'notebooks'),
+    thumbnails: path_.join('/', 'root', 'thumbnails'),
+    databaseMigrations: path_.join('public', 'migrations'),
+  };
+});
 
 const mockParent = new Directory('mockParentPath');
 
@@ -39,16 +45,27 @@ describe('notebooks', () => {
         .resolves.not.toThrow();
 
       expect(fs.mkdirp).toHaveBeenCalledTimes(1);
+      expect(fs.mkdirp).toHaveBeenCalledWith(path.join(
+        path.join(appPaths.notebooks, 'mockParentPath', directoryName),
+      ));
     });
   });
 
   describe('addFile', () => {
-    it('fails if copy does not work', async () => {
+    it('adds to correct path', async () => {
+      fs.copyFile.mockResolvedValueOnce(true);
       isSupportedExtension.mockReturnValueOnce(true);
-      fs.copyFile.mockRejectedValueOnce(new Error('copy failed'));
 
-      await expect(notebooks.addFile(mockParent, 'testPath'))
-        .rejects.toThrow();
+      await notebooks.addFile(mockParent, 'testPath');
+
+      expect(fs.copyFile).toHaveBeenCalledWith(
+        'testPath',
+        path.join(
+          appPaths.notebooks,
+          'mockParentPath',
+          'testPath',
+        ),
+      );
     });
 
     it('checks the file type', async () => {
@@ -56,10 +73,17 @@ describe('notebooks', () => {
       isSupportedExtension.mockReturnValueOnce(true);
       fs.copyFile.mockResolvedValueOnce(true);
 
-      await expect(notebooks.addFile(mockParent, 'testPath'))
-        .resolves.not.toThrow();
+      await notebooks.addFile(mockParent, 'testPath');
 
       expect(isSupportedExtension).toHaveBeenCalledTimes(1);
+    });
+
+    it('fails if copy does not work', async () => {
+      isSupportedExtension.mockReturnValueOnce(true);
+      fs.copyFile.mockRejectedValueOnce(new Error('copy failed'));
+
+      await expect(notebooks.addFile(mockParent, 'testPath'))
+        .rejects.toThrow();
     });
 
     it('fails if wrong file type', async () => {
@@ -107,6 +131,14 @@ describe('notebooks', () => {
 
       expect(fs.copyFile).toHaveBeenCalledTimes(1);
       expect(shell.openItem).toHaveBeenCalledTimes(1);
+      expect(fs.copyFile).toHaveBeenCalledWith(
+        'mockTemplatePath',
+        path.join(
+          appPaths.notebooks,
+          'mockParentPath',
+          'mockPath',
+        ),
+      );
     });
   });
 });
