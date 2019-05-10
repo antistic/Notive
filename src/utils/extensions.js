@@ -4,14 +4,17 @@ import path from 'path';
 const supportedNamesAndExtensions = [
   { name: 'Krita Files', extensions: ['kra'] },
   { name: 'JPEG Images', extensions: ['jpg', 'jpeg'] },
-  { name: 'PNG Images', extensions: ['png'] },
-  { name: 'Photoshop Files', extensions: ['psd'] },
+  ...['png', 'gif', 'svg', 'webp'].map(ext => ({
+    name: `${ext.toUpperCase()} Images`, extensions: [ext],
+  })),
 ];
 
 const supportedExtensions = supportedNamesAndExtensions
   .reduce((acc, x) => acc.concat(x.extensions), []);
 
 export function isSupportedExtension(extName) {
+  if (!extName) return false;
+
   let ext = extName.toLowerCase();
   // remove initial '.'
   ext = ext.slice(1);
@@ -32,8 +35,7 @@ export function isBrowserSupportedImage(filePath) {
 export function showOpenDialog(overrideOptions, callback) {
   const defaultOptions = {
     filters: [
-      // ** is used to force it to be the default option
-      { name: 'All Files', extensions: ['**'] },
+      { name: 'All Supported', extensions: supportedExtensions },
       ...supportedNamesAndExtensions,
     ],
     properties: ['openFile'],

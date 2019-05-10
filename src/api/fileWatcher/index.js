@@ -6,10 +6,13 @@ import os from 'os';
 import appPaths from '@/api/appPaths';
 import database from '@/api/database';
 import store from '@/api/store';
+import { isSupportedExtension } from '@/utils/extensions';
 
 /* ----- watcher methods */
 
 const onAdd = (filePath, stats) => {
+  if (!isSupportedExtension(path.extname(filePath))) return;
+
   const relativePath = path.relative(appPaths.notebooks, filePath);
   database.ensureFileEntry(relativePath, stats)
     .then(({ id, modified }) => {
@@ -56,7 +59,6 @@ export default {
 
     await new Promise((resolve, _) => {
       const watcher = chokidar.watch(appPaths.notebooks, {
-        ignored: [/\.~\w*$|\.(TMP|tmp|kra~)$/],
         persistent: true,
       });
 
