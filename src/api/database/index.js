@@ -1,6 +1,7 @@
 import sqlite from 'sqlite';
 import SQL from 'sql-template-strings';
 import appPaths from '@/api/appPaths';
+import store from '@/api/store';
 import fs from 'fs-extra';
 import path from 'path';
 
@@ -17,6 +18,8 @@ export default {
     await db.get(SQL`PRAGMA foreign_keys = ON`);
 
     this.db = db;
+
+    store.availableAttributes = await this.getAvailableAttributes();
   },
 
   close() {
@@ -77,12 +80,19 @@ export default {
     `);
   },
 
-  async addFileAttributeData(fileId, attributeName, attributeData) {
-    await this.db.run(SQL`
+  async newAttribute(attributeName) {
+    const last = await this.db.run(SQL`
       INSERT OR IGNORE
       INTO AttributesMeta (name)
       VALUES (${attributeName})
     `);
+
+    if (last.stmt.changes > 0) {
+      store.availableAttributes = await this.getAvailableAttributes();
+    }
+  },
+
+  async addFileAttributeData(fileId, attributeName, attributeData) {
     await this.db.run(SQL`
       INSERT
       INTO Attributes (file_id, attr_name, attr_data)
@@ -113,5 +123,12 @@ export default {
       FROM Attributes
       WHERE file_id = ${fileId}
     `);
+  },
+
+  getAvailableAttributes() {
+    return this.db.all(SQL`
+      SELECT *
+      FROM AttributesMeta
+  `);
   },
 };

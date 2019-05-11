@@ -28,48 +28,72 @@
 
     <div class="metadata-container">
       <h3>Metadata</h3>
-      <table class="metadata">
-        <tr
-          v-for="{attr_name, attr_data} in file.metadata"
-          :key="`${attr_name}-${attrData}`"
-          class="attribute"
-        >
-          <td class="metadata-name">
-            {{ attr_name }}:
-          </td>
-          <td class="metadata-data">
-            <EditableField
-              :name="`${attrName}-data`"
-              :value="attr_data"
-              @submit="(value) => { editFileAttribute(attr_name, value) }"
-            />
-          </td>
-          <td class="metadata-actions">
-            <IconButton
-              options="grey inline-small"
-              text=""
-              @click="() => deleteFileAttribute(attr_name)"
-            >
-              <DeleteIcon />
-            </IconButton>
-          </td>
-        </tr>
 
-        <tr class="addRow">
-          <td>
+      <p v-if="!showMore && file.metadata.length === 0">
+        No metadata here.
+      </p>
+
+      <table class="metadata">
+        <tbody v-if="file.metadata.length > 0">
+          <tr
+            v-for="{attr_name, attr_data} in file.metadata"
+            :key="`${attr_name}-${attrData}`"
+            class="attribute"
+          >
+            <td class="metadata-name">
+              {{ attr_name }}:
+            </td>
+            <td class="metadata-data">
+              <EditableField
+                :name="`${attrName}-data`"
+                :value="attr_data"
+                @submit="(value) => { editFileAttribute(attr_name, value) }"
+              />
+            </td>
+            <td class="metadata-actions">
+              <IconButton
+                options="grey inline-small"
+                text=""
+                @click="() => deleteFileAttribute(attr_name)"
+              >
+                <DeleteIcon />
+              </IconButton>
+            </td>
+          </tr>
+        </tbody>
+
+        <tbody v-if="showMore">
+          <tr
+            v-for="attr_name in unusedAttributes"
+            :key="attr_name"
+            class="attribute attribute--unused"
+          >
+            <td class="metadata-name">
+              {{ attr_name }}:
+            </td>
+            <td class="metadata-data">
+              <EditableField
+                :name="`${attrName}-data`"
+                value=""
+                @submit="(value) => { addFileAttribute(attr_name, value) }"
+              />
+            </td>
+            <td class="metadata-actions" />
+          </tr>
+        </tbody>
+
+        <tr
+          v-if="showMore"
+          class="addRow"
+        >
+          <td colspan="2">
             <LabelledTextInput
               v-model="attrName"
-              label="name"
+              label="new attribute name"
             />
           </td>
           <td>
-            <LabelledTextInput
-              v-model="attrData"
-              label="data"
-            />
-          </td>
-          <td>
-            <button @click="addFileAttribute">
+            <button @click="newAttribute">
               add
             </button>
           </td>
@@ -84,6 +108,19 @@
           </td>
         </tr>
       </table>
+
+      <button
+        v-if="!showMore"
+        @click="showMore = true"
+      >
+        Show more
+      </button>
+      <button
+        v-if="showMore"
+        @click="showMore = false"
+      >
+        Show less
+      </button>
     </div>
   </div>
 </template>
@@ -98,6 +135,7 @@ import Modal from '@/components/Modal.vue';
 import Preview from '@/components/Preview.vue';
 import { isBrowserSupportedImage } from '@/utils/extensions';
 import { remote, shell } from 'electron';
+import database from '@/api/database';
 
 export default {
   components: {
@@ -118,10 +156,19 @@ export default {
   data() {
     return {
       showImageModal: false,
+      showMore: false,
       attrName: '',
       attrData: '',
       addErrorMessage: '',
     };
+  },
+  computed: {
+    unusedAttributes() {
+      const available = this.$store.availableAttributes;
+      return available
+        .map(obj => obj.name)
+        .filter(attr => !this.file.metadata.map(row => row.attr_name).includes(attr));
+    },
   },
   methods: {
     editFileAttribute(name, data) {
@@ -130,16 +177,21 @@ export default {
     deleteFileAttribute(name) {
       this.file.deleteAttribute(name);
     },
-    addFileAttribute() {
-      this.file.addAttribute(this.attrName, this.attrData)
-        .then(() => { this.addErrorMessage = ''; })
+    addFileAttribute(name, data) {
+      this.file.addAttribute(name, data);
+    },
+    newAttribute() {
+      database.newAttribute(this.attrName)
+        .then(() => {
+          this.addErrorMessage = '';
+          this.attrName = '';
+        })
         .catch((error) => {
           switch (error.message) {
             case 'SQLITE_CONSTRAINT: UNIQUE constraint failed: Attributes.file_id, Attributes.attr_name':
               this.addErrorMessage = `'${this.attrName}' already exists (maybe you meant to edit?)`;
               break;
             default:
-
               this.addErrorMessage = error.message;
           }
         });
@@ -210,6 +262,14 @@ export default {
   }
 }
 
+tr.attribute--unused {
+
+  .metadata-name {
+    font-style: italic;
+    font-weight: normal;
+  }
+}
+
 tr .metadata-actions button {
   opacity: 0;
   transition: 0.2s opacity;
@@ -219,7 +279,7 @@ tr:hover .metadata-actions button {
   opacity: 1;
 }
 
-.metadata .addRow {
+tr.addRow {
   height: 4em;
 
   td {

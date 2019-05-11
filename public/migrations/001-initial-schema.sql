@@ -8,13 +8,13 @@ create table Files (
 );
 
 create table AttributesMeta (
-    'name' text primary key
+    'name' text primary key not null
 );
 
 create table Attributes (
-    'file_id' integer,
-    'attr_name' text,
-    'attr_data' text,
+    'file_id' integer not null,
+    'attr_name' text not null,
+    'attr_data' text not null,
     primary key ('file_id', 'attr_name'),
     foreign key ('file_id') references Files ('id') on delete cascade,
     foreign key ('attr_name') references AttributesMeta ('name') on delete cascade

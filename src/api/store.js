@@ -5,4 +5,5 @@ export default Vue.observable({
   state: {
     fileTree: {},
   },
+  availableAttributes: [],
 });

@@ -5,7 +5,7 @@
       v-model="valueData"
       type="text"
       :name="name"
-      @enter="$emit('submit', valueData)"
+      @keypress.enter="$emit('submit', valueData)"
       @blur="$emit('submit', valueData)"
     >
   </div>
