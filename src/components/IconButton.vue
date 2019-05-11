@@ -169,6 +169,7 @@ export default {
 }
 
 .iconButton.inline-small {
+  padding: 0;
 
   svg {
     height: 1.5em;

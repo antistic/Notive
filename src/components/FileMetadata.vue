@@ -6,24 +6,24 @@
       No metadata here.
     </p>
 
-    <table class="metadata">
-      <tbody v-if="file.metadata.length > 0">
-        <tr
+    <section class="metadata">
+      <ul v-if="file.metadata.length > 0">
+        <li
           v-for="{attr_name, attr_data} in file.metadata"
           :key="`${attr_name}-${attrData}`"
           class="attribute"
         >
-          <td class="metadata-name">
+          <span class="metadata-name">
             {{ attr_name }}:
-          </td>
-          <td class="metadata-data">
+          </span>
+          <span class="metadata-data">
             <EditableField
               :name="`${attrName}-data`"
               :value="attr_data"
               @submit="(value) => { editFileAttribute(attr_name, value) }"
             />
-          </td>
-          <td class="metadata-actions">
+          </span>
+          <span class="metadata-actions">
             <IconButton
               options="grey inline-small"
               text=""
@@ -31,77 +31,70 @@
             >
               <DeleteIcon />
             </IconButton>
-          </td>
-        </tr>
-      </tbody>
+          </span>
+        </li>
+      </ul>
 
-      <tbody v-if="showMore">
-        <tr
+      <button
+        v-if="!showMore"
+        class="show-more"
+        @click="showMore = true"
+      >
+        <MoreIcon />show more<MoreIcon />
+      </button>
+      <button
+        v-if="showMore"
+        class="show-less"
+        @click="showMore = false"
+      >
+        <LessIcon />show less<LessIcon />
+      </button>
+
+      <ul
+        v-if="showMore"
+        class="unused-attributes"
+      >
+        <li
           v-for="attr_name in unusedAttributes"
           :key="attr_name"
-          class="attribute attribute--unused"
+          class="attribute"
         >
-          <td class="metadata-name">
+          <span class="metadata-name">
             {{ attr_name }}:
-          </td>
-          <td
+          </span>
+          <EditableField
+            :name="`${attrName}-data`"
+            value=""
             class="metadata-data"
-          >
-            <EditableField
-              :name="`${attrName}-data`"
-              value=""
-              @submit="(value) => { addFileAttribute(attr_name, value) }"
-            />
-          </td>
-          <td class="metadata-actions" />
-        </tr>
-      </tbody>
+            @submit="(value) => { addFileAttribute(attr_name, value) }"
+          />
+        </li>
+      </ul>
 
-      <tr
+      <p
         v-if="showMore"
         class="addRow"
       >
-        <td colspan="2">
-          <LabelledTextInput
-            v-model="attrName"
-            label="new attribute name"
-          />
-        </td>
-        <td>
-          <IconButton
-            options="inline-small"
-            text=""
-            @click="newAttribute"
-          >
-            <AddIcon class="hover--spin" />
-          </IconButton>
-        </td>
-      </tr>
-
-      <tr>
-        <td
-          colspan="3"
-          class="error"
+        <LabelledTextInput
+          v-model="attrName"
+          label="new field"
+        />
+        <IconButton
+          options="inline-small"
+          text=""
+          @click="newAttribute"
         >
-          {{ addErrorMessage }}
-        </td>
-      </tr>
-    </table>
+          <AddIcon class="hover--spin" />
+        </IconButton>
+      </p>
 
-    <button
-      v-if="!showMore"
-      class="show-hide"
-      @click="showMore = true"
-    >
-      <MoreIcon />show more<MoreIcon />
-    </button>
-    <button
-      v-if="showMore"
-      class="show-hide"
-      @click="showMore = false"
-    >
-      <LessIcon />show less<LessIcon />
-    </button>
+      <p
+        v-if="addErrorMessage"
+        class="error"
+      >
+        {{ addErrorMessage }}
+      </p>
+    </section>
   </div>
 </template>
 
@@ -169,7 +162,7 @@ export default {
         })
         .catch((error) => {
           switch (error.message) {
-            case 'SQLITE_CONSTRAINT: UNIQUE constraint failed: Attributes.file_id, Attributes.attr_name':
+            case 'SQspanTE_CONSTRAINT: UNIQUE constraint failed: Attributes.file_id, Attributes.attr_name':
               this.addErrorMessage = `'${this.attrName}' already exists (maybe you meant to edit?)`;
               break;
             default:
@@ -192,42 +185,56 @@ export default {
     margin-top: 0;
     text-align: center;
   }
+}
 
-  table {
-    width: 100%;
-    font-size: 12pt;
+.metadata {
+  display: grid;
+  grid-template-columns: 1fr 3fr 2em;
+  grid-auto-rows: 1fr;
+  grid-gap: 5px;
+  width: 100%;
+  font-size: 12pt;
+
+  ul,
+  li {
+    display: contents;
+  }
+
+  li {
+    list-style: none;
   }
 
   .metadata-name {
-    padding-bottom: 6px;
+    grid-column: 1;
+    align-self: baseline;
+    justify-self: end;
     font-weight: bold;
-    text-align: right;
   }
 
   .metadata-data {
-    min-width: 300px;
+    display: block;
+    grid-column: 2;
   }
 
   .metadata-actions {
-    padding-bottom: 3px;
+    grid-column: 3;
+    justify-self: end;
   }
 
   .error {
+    grid-column: 1 / 4;
     font-weight: bold;
     color: red;
     text-align: center;
   }
 }
 
-tr.attribute--unused {
-
-  .metadata-name {
-    font-style: italic;
-    font-weight: normal;
-  }
+ul.unused-attributes .metadata-name {
+  font-style: italic;
+  font-weight: normal;
 }
 
-tr {
+.metadata li {
 
   & .metadata-actions button {
     opacity: 0;
@@ -239,29 +246,46 @@ tr {
   }
 }
 
-tr.addRow {
+.metadata .addRow {
+  display: contents;
 
-  td {
-    padding-top: 2em;
-    padding-bottom: 1em;
-    vertical-align: bottom;
-
-    .text-input {
-      box-sizing: border-box;
-      width: 100%;
-    }
+  > * {
+    grid-row-end: span 2;
+    align-self: end;
   }
 
-  button {
-    position: relative;
-    top: 5px;
-    right: 0;
+  :first-child {
+    grid-column: 1 / 3;
+  }
+
+  :last-child {
+    justify-self: end;
   }
 }
 
-button.show-hide {
-  display: block;
-  margin: 0 auto;
+ul.unused-attributes .metadata-name,
+ul.unused-attributes .metadata-data,
+.metadata .addRow > * {
+  position: relative;
+  animation: fade-down 0.2s;
+}
+
+@keyframes fade-down {
+
+  from {
+    top: -10px;
+    opacity: 0;
+  }
+
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
+
+.show-more,
+.show-less {
+  grid-column: 1 / 4;
   color: $grey-mid;
   background: none;
   border: 0;
@@ -276,7 +300,6 @@ button.show-hide {
   &:hover,
   &:active,
   &:focus {
-
     color: $grey-dark;
     outline: none;
 
