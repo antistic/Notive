@@ -63,6 +63,10 @@ export default {
     .hover--twitch {
       animation: twitch 0.5s;
     }
+
+    .hover--spin {
+      animation: spin 0.5s;
+    }
   }
 
   &:focus {
@@ -95,6 +99,17 @@ export default {
 
   to {
     transform: rotate(0);
+  }
+}
+
+@keyframes spin {
+
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }
 

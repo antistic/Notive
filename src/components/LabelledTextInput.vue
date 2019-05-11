@@ -41,7 +41,7 @@ export default {
 
   label {
     position: absolute;
-    bottom: 2px;
+    bottom: 0.5em;
     left: 3px;
     color: $grey-mid;
     pointer-events: none;
@@ -51,7 +51,7 @@ export default {
   &:active label,
   &:focus-within label,
   label.filled {
-    bottom: 1.5em;
+    bottom: 2em;
     font-weight: bold;
     color: $grey-dark
   }
@@ -59,7 +59,7 @@ export default {
   input {
     box-sizing: border-box;
     width: 100%;
-    padding: 3px;
+    padding: 0.5em 3px;
     font-size: 12pt;
     color: $text-color;
     border: 0;

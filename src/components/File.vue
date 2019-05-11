@@ -71,14 +71,16 @@
             <td class="metadata-name">
               {{ attr_name }}:
             </td>
-            <td class="metadata-data">
+            <td
+              class="metadata-data"
+            >
               <EditableField
                 :name="`${attrName}-data`"
                 value=""
                 @submit="(value) => { addFileAttribute(attr_name, value) }"
               />
             </td>
-            <td class="metadata-actions" />
+            <td class="metadata-actions"/>
           </tr>
         </tbody>
 
@@ -93,9 +95,13 @@
             />
           </td>
           <td>
-            <button @click="newAttribute">
-              add
-            </button>
+            <IconButton
+              options="inline-small"
+              text=""
+              @click="newAttribute"
+            >
+              <AddIcon class="hover--spin" />
+            </IconButton>
           </td>
         </tr>
 
@@ -111,15 +117,17 @@
 
       <button
         v-if="!showMore"
+        class="show-hide"
         @click="showMore = true"
       >
-        Show more
+        <MoreIcon />show more<MoreIcon />
       </button>
       <button
         v-if="showMore"
+        class="show-hide"
         @click="showMore = false"
       >
-        Show less
+        <LessIcon />show less<LessIcon />
       </button>
     </div>
   </div>
@@ -131,6 +139,9 @@ import LabelledTextInput from '@/components/LabelledTextInput.vue';
 import EditableField from '@/components/EditableField.vue';
 import BackIcon from '@icons/md-arrow-round-back.svg';
 import DeleteIcon from '@icons/md-trash.svg';
+import AddIcon from '@icons/md-add-circle.svg';
+import MoreIcon from '@icons/md-arrow-dropdown.svg';
+import LessIcon from '@icons/md-arrow-dropup.svg';
 import Modal from '@/components/Modal.vue';
 import Preview from '@/components/Preview.vue';
 import { isBrowserSupportedImage } from '@/utils/extensions';
@@ -144,6 +155,9 @@ export default {
     EditableField,
     BackIcon,
     DeleteIcon,
+    AddIcon,
+    MoreIcon,
+    LessIcon,
     Modal,
     Preview,
   },
@@ -234,6 +248,7 @@ export default {
 }
 
 .metadata-container {
+  width: 400px;
   padding: 2em;
   margin-top: 2em;
   background-color: white;
@@ -243,7 +258,8 @@ export default {
     text-align: center;
   }
 
-  td {
+  table {
+    width: 100%;
     font-size: 12pt;
   }
 
@@ -280,34 +296,22 @@ tr:hover .metadata-actions button {
 }
 
 tr.addRow {
-  height: 4em;
 
   td {
+    padding-top: 2em;
+    padding-bottom: 1em;
     vertical-align: bottom;
 
     .text-input {
-
       box-sizing: border-box;
       width: 100%;
     }
   }
 
   button {
-    padding: 0.5em 1em;
-    color: white;
-    background: $primary-color;
-    border: 0;
-    border-bottom: 6px solid $primary-dark;
-    border-radius: 3px;
-    transition: 0.1s all;
-
-    &:hover,
-    &:active,
-    &:focus {
-      border-bottom-width: 2px;
-      outline: none;
-      transform: translateY(1px);
-    }
+    position: relative;
+    top: 5px;
+    right: 0;
   }
 }
 
@@ -315,5 +319,32 @@ tr.addRow {
   font-weight: bold;
   color: red;
   text-align: center;
+}
+
+button.show-hide {
+  display: block;
+  margin: 0 auto;
+  color: $grey-mid;
+  background: none;
+  border: 0;
+
+  svg {
+    position: relative;
+    top: 3px;
+    height: 15px;
+    fill: $grey-mid;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+
+    color: $grey-dark;
+    outline: none;
+
+    svg {
+      fill: $grey-dark;
+    }
+  }
 }
 </style>
