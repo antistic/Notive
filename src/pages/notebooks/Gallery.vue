@@ -41,10 +41,10 @@ export default {
     sortedContents() {
       // need slice to create a copy to avoid infinite loop
       return this.contents.slice().sort((a, b) => {
-        if (a.type === 'directory' && b.type !== 'directory') return false;
-        if (a.type !== 'directory' && b.type === 'directory') return true;
+        if (a.type === 'directory' && b.type !== 'directory') return -1;
+        if (b.type === 'directory' && a.type !== 'directory') return 1;
 
-        return a.name > b.name;
+        return a.name < b.name;
       });
     },
   },
