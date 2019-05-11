@@ -4,7 +4,7 @@ import path from 'path';
 const supportedNamesAndExtensions = [
   { name: 'Krita Files', extensions: ['kra'] },
   { name: 'JPEG Images', extensions: ['jpg', 'jpeg'] },
-  ...['png', 'gif', 'svg', 'webp'].map(ext => ({
+  ...['bmp', 'png', 'gif', 'svg', 'tiff', 'webp'].map(ext => ({
     name: `${ext.toUpperCase()} Images`, extensions: [ext],
   })),
 ];
