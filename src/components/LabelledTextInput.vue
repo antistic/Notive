@@ -44,6 +44,7 @@ export default {
     bottom: 2px;
     left: 3px;
     color: $grey-mid;
+    pointer-events: none;
     transition: 0.3s all;
   }
 
