@@ -176,10 +176,14 @@ export default {
 
 <style lang="scss">
 .metadata-container {
+  position: relative;
+  top: -5px;
+  left: -5px;
   width: 400px;
   padding: 2em;
   margin-top: 2em;
   background-color: white;
+  box-shadow: 10px 10px 0 $grey-light;
 
   h3 {
     margin-top: 0;
