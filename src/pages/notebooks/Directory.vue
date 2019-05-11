@@ -1,5 +1,15 @@
 <template>
-  <div>
+  <div
+    @dragenter="startDrop"
+    @dragover="e => e.preventDefault()"
+  >
+    <div
+      :class="{droptarget: true, dragging: dragging}"
+      @dragenter="startDrop"
+      @dragover="e => e.preventDefault()"
+      @dragleave="stopDrop"
+      @drop="drop"
+    />
     <h1>{{ directory.name || 'Notebooks' }}</h1>
 
     <IconButton
@@ -66,6 +76,7 @@ import Gallery from './Gallery.vue';
 import NewImageFromTemplateModal from './modals/NewImageFromTemplate.vue';
 import AddImagesModal from './modals/AddImages.vue';
 import NewDirectoryModal from './modals/NewDirectory.vue';
+import notebooks from '@/api/notebooks';
 
 export default {
   components: {
@@ -90,6 +101,7 @@ export default {
       showNewDirectoryModal: false,
       showNewImageModal: false,
       showAddImagesModal: false,
+      dragging: false,
     };
   },
   methods: {
@@ -110,6 +122,27 @@ export default {
     showFile(file) {
       this.$emit('showFile', file);
     },
+    startDrop(event) {
+      event.preventDefault();
+      this.dragging = true;
+    },
+    stopDrop(event) {
+      event.preventDefault();
+      this.dragging = false;
+    },
+    drop(event) {
+      event.preventDefault();
+      this.dragging = false;
+
+      for (let i = 0; i < event.dataTransfer.items.length; i += 1) {
+        const item = event.dataTransfer.items[i];
+
+        if (item.kind === 'file') {
+          const file = item.getAsFile();
+          notebooks.addFile(this.directory, file.path);
+        }
+      }
+    },
   },
 };
 </script>
@@ -121,6 +154,46 @@ export default {
 
   button {
     margin: 0 0.5em;
+  }
+}
+
+.droptarget {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+
+  display: none;
+  width: 100vw;
+  height: 100vh;
+}
+
+.droptarget.dragging {
+  display: block;
+
+  &:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100vw;
+    height: 100vh;
+    content: "";
+    background: rgba($primary-color, 0.5);
+  }
+
+  &:after {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 100;
+    padding: 0.5em 1em;
+    font-size: 2.5em;
+    content: "drop here!";
+    background: white;
+    border: 5px dashed $primary-color;
+    border-radius: 10px;
+    transform: translate(-50%, -50%);
   }
 }
 </style>
