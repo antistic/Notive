@@ -112,6 +112,12 @@ export default {
   }
 }
 
+.preview--full .items-preview img {
+  object-fit: scale-down;
+  max-width: 250px;
+  max-height: 250px;
+}
+
 .items-preview {
   width: 100%;
   height: 100%;

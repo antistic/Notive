@@ -11,7 +11,7 @@
 
     <Preview
       :images="[file.thumbnailPath]"
-      :item-type="file.type"
+      item-type="full"
       @click="openFile"
     />
 
