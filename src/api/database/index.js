@@ -81,10 +81,12 @@ export default {
   },
 
   async newAttribute(attributeName) {
+    const name = attributeName.trim();
+
     const last = await this.db.run(SQL`
       INSERT OR IGNORE
       INTO AttributesMeta (name)
-      VALUES (${attributeName})
+      VALUES (${name})
     `);
 
     if (last.stmt.changes > 0) {
@@ -93,17 +95,21 @@ export default {
   },
 
   async addFileAttributeData(fileId, attributeName, attributeData) {
+    const data = attributeData.trim();
+
     await this.db.run(SQL`
       INSERT
       INTO Attributes (file_id, attr_name, attr_data)
-      VALUES (${fileId}, ${attributeName}, ${attributeData})
+      VALUES (${fileId}, ${attributeName}, ${data})
     `);
   },
 
   async editFileAttributeData(fileId, attributeName, attributeData) {
+    const data = attributeData.trim();
+
     const result = await this.db.run(SQL`
       UPDATE Attributes
-      SET attr_data=${attributeData}
+      SET attr_data=${data}
       WHERE file_id = ${fileId} AND attr_name = ${attributeName}
     `);
 
