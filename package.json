@@ -11,6 +11,7 @@
     "lint:js": "vue-cli-service lint",
     "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
+    "electron:generate-icons": "electron-icon-builder --input=./public/icon.png --output=build --flatten",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
     "test:unit": "vue-cli-service test:unit"
@@ -37,6 +38,7 @@
     "@vue/eslint-config-airbnb": "^4.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-eslint": "^10.0.1",
+    "electron-icon-builder": "^1.0.0",
     "eslint": "^5.16.0",
     "eslint-plugin-jest": "^22.5.1",
     "eslint-plugin-vue": "^5.2.2",
