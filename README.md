@@ -13,7 +13,7 @@ npm install --production
 ```
 [sqlite3](https://github.com/mapbox/node-sqlite3) needs to be (re-)built for electron. On Windows this requires MSBuildTools 2015.
 ```
-npm rebuild sqlite3--runtime=electron --target=1.7.6 --dist-url=https://atom.io/download/electron
+npm rebuild sqlite3 --runtime=electron --target=5.0.0 --dist-url=https://atom.io/download/electron
 ```
 [sharp](https://github.com/lovell/sharp) may also need rebuilding
 ```
