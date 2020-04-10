@@ -136,8 +136,8 @@ export default {
     unusedAttributes() {
       const available = this.$store.availableAttributes;
       return available
-        .map(obj => obj.name)
-        .filter(attr => !this.file.metadata.map(row => row.attr_name).includes(attr));
+        .map((obj) => obj.name)
+        .filter((attr) => !this.file.metadata.map((row) => row.attr_name).includes(attr));
     },
   },
   methods: {

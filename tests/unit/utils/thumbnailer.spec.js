@@ -51,7 +51,7 @@ describe('thumbnailer', () => {
 
     it.each(
       ['.txt', '.pdf', '.bleh'],
-    )('fails for unsupported (%s) files', ext => expect(
+    )('fails for unsupported (%s) files', (ext) => expect(
       makeThumbnail(`testSource${ext}`, `testSource.kra${ext}`, 0),
     )
       .rejects.toThrow());

@@ -47,6 +47,7 @@ module.exports = {
       '.vue',
     ],
     'import/resolver': {
+      node: {},
       webpack: {
         config: require.resolve('@vue/cli-service/webpack.config.js'),
       },

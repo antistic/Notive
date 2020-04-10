@@ -1,5 +1,5 @@
-import { mount } from '@vue/test-utils';
 import Modal from '@/components/Modal';
+import { mount } from '@vue/test-utils';
 
 describe('modal', () => {
   const testCases = [

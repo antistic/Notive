@@ -1,7 +1,7 @@
+import { isSupportedExtension } from '@/utils/extensions';
 import { shell } from 'electron';
 import fs from 'fs-extra';
 import path from 'path';
-import { isSupportedExtension } from '@/utils/extensions';
 
 export default {
   newDirectory(parent, newDirectoryName) {

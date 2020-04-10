@@ -1,7 +1,7 @@
 import Directory from '@/api/fileWatcher/Directory';
-import path from 'path';
-import fs from 'fs-extra';
 import appPaths from '@/api/appPaths';
+import fs from 'fs-extra';
+import path from 'path';
 
 jest.mock('fs-extra');
 jest.mock('@/api/appPaths', () => {

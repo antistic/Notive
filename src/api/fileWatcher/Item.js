@@ -1,5 +1,5 @@
-import path from 'path';
 import appPaths from '@/api/appPaths';
+import path from 'path';
 
 export default class Item {
   constructor(relativePath) {

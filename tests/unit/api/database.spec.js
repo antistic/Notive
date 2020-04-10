@@ -1,5 +1,5 @@
-import SQL from 'sql-template-strings';
 import database from '@/api/database';
+import SQL from 'sql-template-strings';
 
 jest.mock('@/api/appPaths', () => ({
   database: ':memory:',
@@ -23,7 +23,7 @@ describe('database', () => {
         WHERE type = 'table';
       `);
 
-      expect(tables.map(table => table.name)).toEqual(
+      expect(tables.map((table) => table.name)).toEqual(
         expect.arrayContaining(['Files', 'Attributes', 'AttributesMeta']),
       );
     });

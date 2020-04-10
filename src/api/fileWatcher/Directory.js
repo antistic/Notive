@@ -1,8 +1,8 @@
 import Item from './Item';
 import File from './File';
+import appPaths from '@/api/appPaths';
 import fs from 'fs-extra';
 import path from 'path';
-import appPaths from '@/api/appPaths';
 
 export default class Directory extends Item {
   constructor(relativePath) {
@@ -42,7 +42,7 @@ export default class Directory extends Item {
 
   _deleteChild(item) {
     const index = this.contents.findIndex(
-      child => child.path === item.path,
+      (child) => child.path === item.path,
     );
     if (index > -1) {
       this.contents[index]._clean();
@@ -66,7 +66,7 @@ export default class Directory extends Item {
     if (next === '.') return this;
 
     const nextItem = this.contents.find(
-      item => item.name === next,
+      (item) => item.name === next,
     );
 
     if (rest.length === 0) return nextItem;

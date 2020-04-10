@@ -1,12 +1,12 @@
 import Directory from './Directory';
-import chokidar from 'chokidar';
-import fs from 'fs-extra';
-import path from 'path';
-import os from 'os';
 import appPaths from '@/api/appPaths';
 import database from '@/api/database';
 import store from '@/api/store';
 import { isSupportedExtension } from '@/utils/extensions';
+import chokidar from 'chokidar';
+import fs from 'fs-extra';
+import path from 'path';
+import os from 'os';
 
 /* ----- watcher methods */
 
@@ -58,7 +58,7 @@ const onUnlinkDir = (dirPath) => {
 export default {
   async setup() {
     await Promise.all(['root', 'notebooks', 'templates', 'thumbnails'].map(
-      dirName => fs.ensureDir(appPaths[dirName]),
+      (dirName) => fs.ensureDir(appPaths[dirName]),
     ));
 
     store.state.fileTree = new Directory('');

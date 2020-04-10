@@ -1,9 +1,9 @@
 import Item from './Item';
-import fs from 'fs-extra';
-import path from 'path';
 import makeThumbnail from '@/utils/thumbnailer';
 import database from '@/api/database';
 import appPaths from '@/api/appPaths';
+import fs from 'fs-extra';
+import path from 'path';
 
 export default class File extends Item {
   constructor(relativePath, fileId) {

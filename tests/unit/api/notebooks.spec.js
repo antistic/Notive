@@ -1,10 +1,10 @@
-import fs from 'fs-extra';
-import { shell } from 'electron';
 import { isSupportedExtension } from '@/utils/extensions';
 import Directory from '@/api/fileWatcher/Directory';
 import notebooks from '@/api/notebooks';
-import path from 'path';
 import appPaths from '@/api/appPaths';
+import { shell } from 'electron';
+import fs from 'fs-extra';
+import path from 'path';
 
 jest.mock('fs-extra');
 jest.mock('@/api/fileWatcher/Directory', () => require('@/api/fileWatcher/Item'));

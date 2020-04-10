@@ -1,7 +1,8 @@
-import sqlite from 'sqlite';
-import SQL from 'sql-template-strings';
 import appPaths from '@/api/appPaths';
 import store from '@/api/store';
+import sqlite3 from 'sqlite3';
+import * as sqlite from 'sqlite';
+import SQL from 'sql-template-strings';
 import fs from 'fs-extra';
 import path from 'path';
 
@@ -9,7 +10,10 @@ export default {
   async setup() {
     fs.ensureDir(path.dirname(appPaths.database));
 
-    const db = await sqlite.open(appPaths.database);
+    const db = await sqlite.open({
+      filename: appPaths.database,
+      driver: sqlite3.Database,
+    });
 
     await db.migrate({
       migrationsPath: appPaths.databaseMigrations,

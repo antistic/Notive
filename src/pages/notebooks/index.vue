@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import File from '@/components/File.vue';
 import Directory from './Directory.vue';
+import File from '@/components/File.vue';
 
 export default {
   components: {
