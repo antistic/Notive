@@ -23,7 +23,7 @@ jobs:
       run: npm ci
       
     - name: Lint css
-      run: npx run stylelint --fix ./src/**/*.vue ./src/**/*.css
+      run: npx run stylelint ./src/**/*.vue ./src/**/*.css
       
     - name: Lint js
       run: npx run eslint src tests
