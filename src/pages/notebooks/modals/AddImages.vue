@@ -43,7 +43,7 @@ export default {
           title: 'Choose Image',
           buttonLabel: 'Choose Image',
           properties: ['openFile', 'multiSelections'],
-        },
+        }).then(
         (filePaths) => {
           if (filePaths) {
             this.imagePaths = filePaths;

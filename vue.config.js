@@ -2,6 +2,15 @@
 const path = require('path');
 
 module.exports = {
+  configureWebpack: {
+    entry: './src/main.ts'
+  },
+  // pages: {
+  //   app: {
+  //     entry: 'src/main.js',
+  //     template: 'public/index.html',
+  //   },
+  // },
   css: {
     loaderOptions: {
       sass: {

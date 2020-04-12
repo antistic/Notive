@@ -53,12 +53,12 @@ export default {
           title: 'Choose template',
           defaultPath: this.$appPaths.templates,
           buttonLabel: 'Use Template',
-        },
+        }.then(
         (filePaths) => {
           if (filePaths) {
             this.templatePath = filePaths[0];
           }
-        },
+        }),
       );
     },
     createNewImage() {
