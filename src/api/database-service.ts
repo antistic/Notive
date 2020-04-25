@@ -51,7 +51,7 @@ export async function surrenderUntoMeADatabaseWithWhichICanWork(databasePath: st
   return new DatabaseService(db);
 }
 
-class DatabaseService {
+export class DatabaseService {
   constructor(private db: sqlite.Database<sqlite3.Database, sqlite3.Statement>) { }
 
   close = this.db.close;

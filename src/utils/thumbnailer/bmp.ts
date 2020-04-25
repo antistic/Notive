@@ -1,8 +1,8 @@
 import { decode } from '@vingle/bmp-js';
-import sharp from 'sharp';
-import fs from 'fs-extra';
+import * as fs from 'fs-extra';
+import * as sharp from 'sharp';
 
-export default async (source, destination) => {
+export async function makeBmpThumbnail(source: string, destination: string) {
   const buf = fs.readFileSync(source);
   const bitmap = decode(buf, true);
 

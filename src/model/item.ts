@@ -1,6 +1,10 @@
 export interface File {
   parent: Directory;
   name: string;
+  id: number;
+  metadata: {
+    [key: string]: string,
+  };
 }
 
 export interface Directory {

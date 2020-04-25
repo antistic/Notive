@@ -8,13 +8,13 @@ import {
   createProtocol,
   installVueDevtools,
 } from 'vue-cli-plugin-electron-builder/lib';
-import path from 'path';
+import * as path from 'path';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win;
+let win: BrowserWindow;
 
 
 // Scheme must be registered before the app is ready

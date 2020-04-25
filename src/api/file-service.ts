@@ -4,17 +4,20 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import { Directory, File } from '@/model';
 
-class FileService {
-  constructor(private rootPath: string) { }
+export class FileService {
+  constructor(public readonly rootNotebooksPath: string) { }
 
-  private getFullPath = (entity: File | Directory): string =>
-    path.join(entity.parent ? this.getFullPath(entity.parent) : this.rootPath, entity.name);
+  getFullPath = (entity: File | Directory): string =>
+    path.join(entity.parent ? this.getFullPath(entity.parent) : this.rootNotebooksPath, entity.name);
+
+  getRelativePath = (filePath: string): string =>
+    path.relative(this.rootNotebooksPath, filePath);
 
   createDirectory = (parent: Directory, name: string): Promise<void> => name
     ? fs.mkdirp(path.join(this.getFullPath(parent), name))
     : Promise.reject(new Error('Directory name is empty'));
 
-  createFile = (parent: Directory, existingPath: string): Promise<void> => {
+  createFile(parent: Directory, existingPath: string): Promise<void> {
     const ext = path.extname(existingPath);
     if (!isSupportedExtension(ext)) {
       throw new Error('Unsupported file type');

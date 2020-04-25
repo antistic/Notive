@@ -19,6 +19,8 @@
   "main": "background.js",
   "dependencies": {
     "@types/fs-extra": "^8.1.0",
+    "@types/sharp": "^0.24.0",
+    "@types/yauzl": "^2.9.1",
     "@vingle/bmp-js": "^0.2.5",
     "aws-sdk": "^2.656.0",
     "chokidar": "^3.3.1",
