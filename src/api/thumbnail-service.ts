@@ -1,6 +1,4 @@
-import { isSupportedExtension } from '@/utils/extensions';
 import { makeThumbnail } from '@/utils/thumbnailer';
-import { shell } from 'electron';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { Directory, File } from '@/model';

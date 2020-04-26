@@ -1,13 +1,11 @@
 import * as chokidar from 'chokidar';
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import * as os from 'os';
 import { isSupportedExtension } from '@/utils/extensions';
 import { DatabaseService } from './database-service';
 import { FileService } from './file-service';
 import { State, state } from './store';
 import { Directory, File } from '@/model';
-import { access } from 'fs';
 import { ThumbnailService } from './thumbnail-service';
 
 export async function surrenderUntoMeAFileWatcherWithWhichICanWork(databaseService: DatabaseService, fileService: FileService,
@@ -21,25 +19,13 @@ export async function surrenderUntoMeAFileWatcherWithWhichICanWork(databaseServi
     const service = new FileWatcherService(databaseService, watcher, fileService, thumbnailService, state);
     watcher
       .on('add', service.onAddFile)
-      .on('addDir', onAddDir)
-      .on('change', onChange)
-      .on('unlink', onUnlink)
-      .on('unlinkDir', onUnlinkDir)
+      .on('addDir', service.onAddDir)
+      .on('change', service.onChange)
+      .on('unlink', service.onUnlink)
+      .on('unlinkDir', service.onUnlinkDir)
       .on('ready', resolve);
     return service;
   });
-}
-
-function compose<A, B, C>(f: (b: B) => C, g: (a: A) => B) {
-  return (a: A) => f(g(a));
-}
-
-function asEntryOf<T>(object: T) {
-  return (key: keyof T) => object[key];
-}
-
-function equiv<T>(a: T) {
-  return (b: T) => a === b;
 }
 
 export class FileWatcherService {
@@ -134,25 +120,18 @@ export class FileWatcherService {
       .then(() => this.thumbnailService.makeThumbnail(file));
   }
 
-
   onUnlink(filePath: string) {
-
-    
-
-    const relativePath = path.relative(appPaths.notebooks, filePath);
-    try {
-      store.state.fileTree.deleteChildPath(relativePath);
-    } catch (e) {
-      if (e.message === "Cannot read property '_findItemByParts' of undefined") {
-        // pass since it's likely the parent directory was deleted first
-      }
-    }
-    database.deleteFileEntry(filePath);
+    const relativePath = this.fileService.getRelativePath(filePath);
+    const parent = this.getParentFromPath(relativePath);
+    parent.files = parent.files
+      .filter(file => file.name !== path.basename(filePath));
+    this.db.deleteFileEntry(filePath);
   }
 
-
   onUnlinkDir(dirPath: string) {
-    const relativePath = path.relative(appPaths.notebooks, dirPath);
-    store.state.fileTree.deleteChildPath(relativePath);
+    const relativePath = this.fileService.getRelativePath(dirPath);
+    const parent = this.getParentFromPath(relativePath);
+    parent.children = parent.children
+      .filter(child => child.name !== path.basename(dirPath));
   }
 }
