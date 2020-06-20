@@ -52,8 +52,8 @@ export default {
     getImagePaths(item) {
       if (item.type === 'directory') {
         return item.contents
-          .filter((child) => child.type === 'file')
-          .map((child) => child.thumbnailPath);
+          .filter(child => child.type === 'file')
+          .map(child => child.thumbnailPath);
       }
 
       return [item.thumbnailPath];

@@ -29,7 +29,7 @@ describe('notebooks', () => {
 
     it.each(
       ['', null, undefined],
-    )('fails on invalid directory names', async (directoryName) => {
+    )('fails on invalid directory names', async directoryName => {
       await expect(notebooks.newDirectory(mockParent, directoryName))
         .rejects.toThrow();
 
@@ -38,7 +38,7 @@ describe('notebooks', () => {
 
     it.each(
       ['0', 'testDirectory - name'],
-    )('works with valid directory names', async (directoryName) => {
+    )('works with valid directory names', async directoryName => {
       fs.mkdirp.mockResolvedValue();
 
       await expect(notebooks.newDirectory(mockParent, directoryName))
@@ -102,7 +102,7 @@ describe('notebooks', () => {
 
     it.each(
       ['', null, undefined],
-    )('fails on invalid file path %p', async (filePath) => {
+    )('fails on invalid file path %p', async filePath => {
       await expect(notebooks.newFileFromTemplate(
         mockParent, filePath, 'mockTemplatePath',
       )).rejects.toThrow();
@@ -112,7 +112,7 @@ describe('notebooks', () => {
 
     it.each(
       ['', null, undefined],
-    )('fails on invalid template path %p', async (templatePath) => {
+    )('fails on invalid template path %p', async templatePath => {
       await expect(notebooks.newFileFromTemplate(
         mockParent, 'mockFilePath', templatePath,
       )).rejects.toThrow();

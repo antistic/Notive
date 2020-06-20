@@ -4,16 +4,9 @@
       <h2>add image(s)</h2>
       <p>
         {{ imagePaths }}
-        <button @click="chooseImages">
-          choose image(s)
-        </button>
+        <button @click="chooseImages">choose image(s)</button>
       </p>
-      <button
-        :disabled="imagePaths.length === 0"
-        @click="addNewImages"
-      >
-        add image(s)
-      </button>
+      <button :disabled="imagePaths.length === 0" @click="addNewImages">add image(s)</button>
     </div>
   </Modal>
 </template>
@@ -38,21 +31,18 @@ export default {
   },
   methods: {
     chooseImages() {
-      showOpenDialog(
-        {
-          title: 'Choose Image',
-          buttonLabel: 'Choose Image',
-          properties: ['openFile', 'multiSelections'],
-        },
-        (filePaths) => {
-          if (filePaths) {
-            this.imagePaths = filePaths;
-          }
-        },
-      );
+      showOpenDialog({
+        title: 'Choose Image',
+        buttonLabel: 'Choose Image',
+        properties: ['openFile', 'multiSelections'],
+      }).then(data => {
+        if (data) {
+          this.imagePaths = data.filePaths;
+        }
+      });
     },
     addNewImages() {
-      this.imagePaths.forEach((imagePath) => {
+      this.imagePaths.forEach(imagePath => {
         notebooks.addFile(this.parent, imagePath);
       });
 

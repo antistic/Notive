@@ -37,7 +37,7 @@ describe('thumbnailer', () => {
 
     it.each(
       ['.jpg', '.gif', '.png', 'svg', 'tiff', 'webp'],
-    )('calls the right thumbnailer for %s files', async (ext) => {
+    )('calls the right thumbnailer for %s files', async ext => {
       const spy = jest.spyOn(makeSharpThumbnail, 'default');
       spy.mockResolvedValueOnce(true);
 
@@ -51,7 +51,7 @@ describe('thumbnailer', () => {
 
     it.each(
       ['.txt', '.pdf', '.bleh'],
-    )('fails for unsupported (%s) files', (ext) => expect(
+    )('fails for unsupported (%s) files', ext => expect(
       makeThumbnail(`testSource${ext}`, `testSource.kra${ext}`, 0),
     )
       .rejects.toThrow());
