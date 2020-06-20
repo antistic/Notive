@@ -1,7 +1,7 @@
 import { isSupportedExtension } from '@/utils/extensions';
+import appPaths from '@/api/appPaths';
 import Directory from '@/api/fileWatcher/Directory';
 import notebooks from '@/api/notebooks';
-import appPaths from '@/api/appPaths';
 import { shell } from 'electron';
 import fs from 'fs-extra';
 import path from 'path';

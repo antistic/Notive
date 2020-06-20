@@ -20,8 +20,8 @@
 
 <script>
 import Modal from '@/components/Modal.vue';
-import notebooks from '@/api/notebooks';
 import { showOpenDialog } from '@/utils/extensions';
+import notebooks from '@/api/notebooks';
 
 export default {
   components: { Modal },
@@ -43,7 +43,8 @@ export default {
           title: 'Choose Image',
           buttonLabel: 'Choose Image',
           properties: ['openFile', 'multiSelections'],
-        }).then(
+        },
+      ).then(
         (filePaths) => {
           if (filePaths) {
             this.imagePaths = filePaths;

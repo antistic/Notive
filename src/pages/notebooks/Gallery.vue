@@ -7,7 +7,6 @@
     >
       <img :src="currentImage.path">
     </Modal>
-
     <Preview
       v-for="item in sortedContents"
       :key="item.path"

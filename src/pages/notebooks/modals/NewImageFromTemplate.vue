@@ -28,8 +28,8 @@
 
 <script>
 import Modal from '@/components/Modal.vue';
-import notebooks from '@/api/notebooks';
 import { showOpenDialog } from '@/utils/extensions';
+import notebooks from '@/api/notebooks';
 
 export default {
   components: { Modal },
@@ -54,11 +54,12 @@ export default {
           defaultPath: this.$appPaths.templates,
           buttonLabel: 'Use Template',
         }.then(
-        (filePaths) => {
-          if (filePaths) {
-            this.templatePath = filePaths[0];
-          }
-        }),
+          (filePaths) => {
+            if (filePaths) {
+              this.templatePath = filePaths[0];
+            }
+          },
+        ),
       );
     },
     createNewImage() {

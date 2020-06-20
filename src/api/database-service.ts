@@ -1,13 +1,13 @@
-import * as sqlite3 from 'sqlite3';
-import * as sqlite from 'sqlite';
-import SQL from 'sql-template-strings';
-import * as fs from 'fs-extra';
-import * as path from 'path';
+import * as sqlite3 from "sqlite3";
+import * as sqlite from "sqlite";
+import SQL from "sql-template-strings";
+import * as fs from "fs-extra";
+import * as path from "path";
 
 interface AttributeDto {
-  'file_id': number;
-  'attr_name': string;
-  'attr_data': string;
+  file_id: number;
+  attr_name: string;
+  attr_data: string;
 }
 
 interface Attribute {
@@ -17,9 +17,9 @@ interface Attribute {
 }
 
 interface FileDto {
-  'id': number;
-  'path': string;
-  'last_modified': number;
+  id: number;
+  path: string;
+  last_modified: number;
 }
 
 interface File {
@@ -32,18 +32,21 @@ interface AttributesMetaDto {
   name: string;
 }
 
-interface AttributesMeta extends AttributesMetaDto { }
+interface AttributesMeta extends AttributesMetaDto {}
 
-export async function surrenderUntoMeADatabaseWithWhichICanWork(databasePath: string, databaseMigrations: string) {
+export async function surrenderUntoMeADatabaseWithWhichICanWork(
+  databasePath: string,
+  databaseMigrations: string
+): Promise<DatabaseService> {
   fs.ensureDir(path.dirname(databasePath));
 
   const db = await sqlite.open({
     filename: databasePath,
-    driver: sqlite3.Database,
+    driver: sqlite3.Database
   } as sqlite.ISqlite.Config);
 
   db.migrate({
-    migrationsPath: databaseMigrations,
+    migrationsPath: databaseMigrations
   });
 
   await db.get(SQL`PRAGMA foreign_keys = ON`);
@@ -52,11 +55,14 @@ export async function surrenderUntoMeADatabaseWithWhichICanWork(databasePath: st
 }
 
 export class DatabaseService {
-  constructor(private db: sqlite.Database<sqlite3.Database, sqlite3.Statement>) { }
+  constructor(private db: sqlite.Database<sqlite3.Database, sqlite3.Statement>) {}
 
   close = this.db.close;
 
-  async ensureFileEntry(filePath: string, stats: fs.Stats): Promise<{ id: number, modified: boolean }> {
+  async ensureFileEntry(
+    filePath: string,
+    stats: fs.Stats
+  ): Promise<{ id: number; modified: boolean }> {
     const row = await this.db.get<FileDto>(SQL`
       SELECT TOP 1 *
       FROM Files
@@ -69,7 +75,7 @@ export class DatabaseService {
       }
       return {
         id: row.id,
-        modified: false,
+        modified: false
       };
     }
 
@@ -80,12 +86,12 @@ export class DatabaseService {
     `);
 
     if (!last.lastID) {
-      throw new Error('holy fuck');
+      throw new Error("holy fuck");
     }
 
     return {
       id: last.lastID,
-      modified: true,
+      modified: true
     };
   }
 
@@ -104,12 +110,18 @@ export class DatabaseService {
       WHERE path = ${filePath}
     `);
 
-  newAttribute = (attributeName: string) => // TODO need to update available attributes once this is done
-    this.db.run(SQL`
+  newAttribute = (
+    attributeName: string // TODO need to update available attributes once this is done
+  ) =>
+    this.db
+      .run(
+        SQL`
       INSERT OR IGNORE
       INTO AttributesMeta (name)
       VALUES (${attributeName.trim()})
-    `).then(last => last.changes ?? 0);
+    `
+      )
+      .then(last => last.changes ?? 0);
 
   addFileAttributeData = (fileId: number, attributeName: string, attributeData: string) =>
     this.db.run(SQL`
@@ -119,16 +131,20 @@ export class DatabaseService {
     `);
 
   editFileAttributeData = async (fileId: number, attributeName: string, attributeData: string) =>
-    this.db.run(SQL`
+    this.db
+      .run(
+        SQL`
       UPDATE Attributes
       SET attr_data=${attributeData.trim()}
       WHERE file_id = ${fileId} AND attr_name = ${attributeName}
-    `).then(result => {
-      if (result.changes === 0) {
-        throw new Error('Attribute doesn"t exist');
-      }
-      return result;
-    });
+    `
+      )
+      .then(result => {
+        if (result.changes === 0) {
+          throw new Error('Attribute doesn"t exist');
+        }
+        return result;
+      });
 
   deleteFileAttributeData = (fileId: number, attributeName: string) =>
     this.db.run(SQL`
@@ -136,20 +152,33 @@ export class DatabaseService {
       WHERE file_id = ${fileId} AND attr_name = ${attributeName}
     `);
 
-  getFileAttributes = (fileId: number) => this.db.all<AttributeDto[]>(SQL`
+  getFileAttributes = (fileId: number) =>
+    this.db
+      .all<AttributeDto[]>(
+        SQL`
       SELECT *
       FROM Attributes
       WHERE file_id = ${fileId}
-    `).then(dtos =>
-    dtos.map(dto => ({
-      fileId: dto.file_id,
-      key: dto.attr_name,
-      value: dto.attr_data,
-    } as Attribute))
-  );
+    `
+      )
+      .then(dtos =>
+        dtos.map(
+          dto =>
+            ({
+              fileId: dto.file_id,
+              key: dto.attr_name,
+              value: dto.attr_data
+            } as Attribute)
+        )
+      );
 
-  getAvailableAttributes = () => this.db.all<AttributesMetaDto[]>(SQL`
+  getAvailableAttributes = () =>
+    this.db
+      .all<AttributesMetaDto[]>(
+        SQL`
       SELECT *
       FROM AttributesMeta
-    `).then(dtos => dtos.map(dto => dto.name));
+    `
+      )
+      .then(dtos => dtos.map(dto => dto.name));
 }
