@@ -136,8 +136,8 @@ export default {
     unusedAttributes() {
       const available = this.$store.availableAttributes;
       return available
-        .map((obj) => obj.name)
-        .filter((attr) => !this.file.metadata.map((row) => row.attr_name).includes(attr));
+        .map(obj => obj.name)
+        .filter(attr => !this.file.metadata.map(row => row.attr_name).includes(attr));
     },
   },
   methods: {
@@ -160,7 +160,7 @@ export default {
           this.addErrorMessage = '';
           this.attrName = '';
         })
-        .catch((error) => {
+        .catch(error => {
           switch (error.message) {
             case 'SQspanTE_CONSTRAINT: UNIQUE constraint failed: Attributes.file_id, Attributes.attr_name':
               this.addErrorMessage = `'${this.attrName}' already exists (maybe you meant to edit?)`;

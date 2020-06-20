@@ -23,7 +23,7 @@ describe('database', () => {
         WHERE type = 'table';
       `);
 
-      expect(tables.map((table) => table.name)).toEqual(
+      expect(tables.map(table => table.name)).toEqual(
         expect.arrayContaining(['Files', 'Attributes', 'AttributesMeta']),
       );
     });
@@ -42,7 +42,7 @@ describe('database', () => {
       [{ name: 'testPath', mtime: 10 }],
       [{ name: 'testPath', mtime: 10 }, { name: 'testPath', mtime: 10 }],
       [{ name: 'testPath', mtime: 10 }, { name: 'testPath', mtime: 20 }],
-    ])('returns correct id %#', async (files) => {
+    ])('returns correct id %#', async files => {
       for (let i = 0; i < files.length; i += 1) {
         const file = files[i];
 

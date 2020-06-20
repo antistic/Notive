@@ -54,7 +54,7 @@ export default {
           defaultPath: this.$appPaths.templates,
           buttonLabel: 'Use Template',
         },
-        (filePaths) => {
+        filePaths => {
           if (filePaths) {
             this.templatePath = filePaths[0];
           }

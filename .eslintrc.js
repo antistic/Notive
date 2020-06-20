@@ -15,37 +15,47 @@ module.exports = {
     '@vue/airbnb',
   ],
   rules: {
+    'arrow-parens': ['error', 'as-needed'],
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
-    'no-unused-vars': [process.env.NODE_ENV === 'production' ? 'error' : 'warn', {
-      argsIgnorePattern: '^_',
-    }],
+    'no-unused-vars': [
+      process.env.NODE_ENV === 'production' ? 'error' : 'warn',
+      {
+        argsIgnorePattern: '^_',
+      },
+    ],
     'no-underscore-dangle': 'off',
     'no-warning-comments': 'warn',
-    'prefer-destructuring': ['warn', {
-      AssignmentExpression: {
-        array: false,
+    'prefer-destructuring': [
+      'warn',
+      {
+        AssignmentExpression: {
+          array: false,
+        },
       },
-    }],
-    'import/extensions': ['error', {
-      js: 'never',
-      svg: 'always',
-      vue: 'ignorePackages',
-    }],
-    'import/order': ['error', {
-      groups: ['index', 'sibling', 'parent', 'internal', 'external', 'builtin'],
-      'newlines-between': 'never',
-    }],
+    ],
+    'import/extensions': [
+      'error',
+      {
+        js: 'never',
+        svg: 'always',
+        vue: 'ignorePackages',
+      },
+    ],
+    'import/order': [
+      'error',
+      {
+        groups: ['index', 'sibling', 'parent', 'internal', 'external', 'builtin'],
+        'newlines-between': 'never',
+      },
+    ],
     'jest/no-test-prefixes': 'off',
   },
   parserOptions: {
     parser: 'babel-eslint',
   },
   settings: {
-    'import/extensions': [
-      '.js',
-      '.vue',
-    ],
+    'import/extensions': ['.js', '.vue'],
     'import/resolver': {
       node: {},
       webpack: {

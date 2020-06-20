@@ -24,7 +24,7 @@ const onAdd = (filePath, stats) => {
     });
 };
 
-const onAddDir = (dirPath) => {
+const onAddDir = dirPath => {
   if (dirPath !== appPaths.notebooks) {
     const relativePath = path.relative(appPaths.notebooks, dirPath);
     store.state.fileTree.addDirectory(relativePath);
@@ -38,7 +38,7 @@ const onChange = (filePath, stats) => {
   file.makeThumbnail(true);
 };
 
-const onUnlink = (filePath) => {
+const onUnlink = filePath => {
   const relativePath = path.relative(appPaths.notebooks, filePath);
   try {
     store.state.fileTree.deleteChildPath(relativePath);
@@ -50,7 +50,7 @@ const onUnlink = (filePath) => {
   database.deleteFileEntry(filePath);
 };
 
-const onUnlinkDir = (dirPath) => {
+const onUnlinkDir = dirPath => {
   const relativePath = path.relative(appPaths.notebooks, dirPath);
   store.state.fileTree.deleteChildPath(relativePath);
 };
@@ -58,7 +58,7 @@ const onUnlinkDir = (dirPath) => {
 export default {
   async setup() {
     await Promise.all(['root', 'notebooks', 'templates', 'thumbnails'].map(
-      (dirName) => fs.ensureDir(appPaths[dirName]),
+      dirName => fs.ensureDir(appPaths[dirName]),
     ));
 
     store.state.fileTree = new Directory('');
@@ -75,7 +75,7 @@ export default {
         .on('unlink', onUnlink)
         .on('unlinkDir', onUnlinkDir)
         .on('ready', resolve)
-        .on('error', (error) => {
+        .on('error', error => {
           // Ignore EPERM errors in windows, which happen if you delete watched folders
           // https://github.com/paulmillr/chokidar/issues/566
           if (error.code === 'EPERM' && os.platform() === 'win32') {

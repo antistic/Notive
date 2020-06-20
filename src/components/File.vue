@@ -69,7 +69,7 @@ export default {
             message: 'Open in default app?',
             buttons: ['Cancel', 'Open'],
           },
-          (response) => {
+          response => {
             switch (response) {
               case 0:
                 // cancel

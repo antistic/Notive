@@ -4,7 +4,7 @@ import path from 'path';
 const supportedNamesAndExtensions = [
   { name: 'Krita Files', extensions: ['kra'] },
   { name: 'JPEG Images', extensions: ['jpg', 'jpeg'] },
-  ...['bmp', 'png', 'gif', 'svg', 'tiff', 'webp'].map((ext) => ({
+  ...['bmp', 'png', 'gif', 'svg', 'tiff', 'webp'].map(ext => ({
     name: `${ext.toUpperCase()} Images`, extensions: [ext],
   })),
 ];
@@ -32,7 +32,7 @@ export function isBrowserSupportedImage(filePath) {
 }
 
 
-export function showOpenDialog(overrideOptions, callback) {
+export function showOpenDialog(overrideOptions) {
   const defaultOptions = {
     filters: [
       { name: 'All Supported', extensions: supportedExtensions },
@@ -43,5 +43,5 @@ export function showOpenDialog(overrideOptions, callback) {
 
   const options = Object.assign(defaultOptions, overrideOptions);
 
-  remote.dialog.showOpenDialog(options, callback);
+  return remote.dialog.showOpenDialog(options);
 }

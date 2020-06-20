@@ -64,7 +64,7 @@ function registerProtocol() {
     url = url.split('?m=')[0];
     url = path.join(global.appPaths.root, url);
     callback({ path: url });
-  }, (error) => {
+  }, error => {
     if (error) {
       dialog.showMessageBox({
         type: 'error',
@@ -112,7 +112,7 @@ app.on('ready', async () => {
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
   if (process.platform === 'win32') {
-    process.on('message', (data) => {
+    process.on('message', data => {
       if (data === 'graceful-exit') {
         app.quit();
       }
