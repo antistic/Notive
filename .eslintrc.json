@@ -1,0 +1,78 @@
+{
+  "root": true,
+  "env": {
+    "node": true
+  },
+  "globals": {
+    "__static": "readonly"
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/errors",
+    "plugin:vue/essential",
+    "plugin:jest/recommended",
+    "plugin:vue/recommended",
+    "@vue/airbnb",
+    "@vue/typescript/recommended"
+  ],
+  "rules": {
+    "no-console": "warn",
+    "no-debugger": "warn",
+    "no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "no-underscore-dangle": "off",
+    "no-warning-comments": "warn",
+    "prefer-destructuring": [
+      "warn",
+      {
+        "AssignmentExpression": {
+          "array": false
+        }
+      }
+    ],
+    "import/extensions": [
+      "error",
+      {
+        "js": "never",
+        "svg": "always",
+        "vue": "ignorePackages"
+      }
+    ],
+    "import/no-unresolved": "error",
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "index",
+          "sibling",
+          "parent",
+          "internal",
+          "external",
+          "builtin"
+        ],
+        "newlines-between": "never"
+      }
+    ],
+    "import/prefer-default-export": "off",
+    "jest/no-test-prefixes": "off"
+  },
+  "parserOptions": {
+    "parser": "babel-eslint"
+  },
+  "settings": {
+    "import/extensions": [".vue", ".ts"],
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      // use <root>/tsconfig.json
+      "typescript": {
+        "alwaysTryTypes": true // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
+      }
+    }
+  }
+}

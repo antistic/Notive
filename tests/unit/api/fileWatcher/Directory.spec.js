@@ -1,5 +1,5 @@
-import Directory from '@/api/fileWatcher/Directory';
 import appPaths from '@/api/appPaths';
+import Directory from '@/api/fileWatcher/Directory';
 import fs from 'fs-extra';
 import path from 'path';
 
