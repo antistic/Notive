@@ -23,7 +23,7 @@
     "chokidar": "^3.3.1",
     "electron": "8.5.2",
     "fs-extra": "^9.0.0",
-    "sharp": "^0.25.2",
+    "sharp": "^0.30.5",
     "sql-template-strings": "^2.2.2",
     "sqlite": "^4.0.5",
     "sqlite3": "^4.1.1",
