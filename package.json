@@ -28,7 +28,7 @@
     "sqlite": "^4.0.5",
     "sqlite3": "^4.1.1",
     "vue": "^2.6.11",
-    "vue-cli-plugin-electron-builder": "^1.4.6",
+    "vue-cli-plugin-electron-builder": "^2.1.1",
     "vue-svg-loader": "^0.16.0",
     "yauzl": "^2.10.0"
   },
